@@ -1,4 +1,3 @@
-"use client"
 import DashboardSideBar from "@components/DashboardSideBar"
 import FinanceView from "@components/FinanceView"
 

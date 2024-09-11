@@ -4,7 +4,6 @@ import Image from "next/image";
 import {useSession, signOut, signIn} from "next-auth/react"
 
 const Header = () => {
-    
     const {data:session} = useSession()
     
   return (

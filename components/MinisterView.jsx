@@ -9,7 +9,9 @@ const MinisterView = () => {
 
     const [fetchTrigger, setFetchTrigger] = useState(0)
 
-    const [fetchedData, setFetchedData] = useEffect(()=>{
+    const [fetchedData, setFetchedData] = useState({})
+    
+    useEffect(()=>{
         const fetchData = async () =>{
             const response = await fetch('/api/ministers')
             const data = await response.json()

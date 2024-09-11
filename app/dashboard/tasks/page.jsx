@@ -1,5 +1,3 @@
-"use client"
-
 import DashboardSideBar from "@components/DashboardSideBar"
 import TasksView from "@components/TasksView"
 

@@ -47,9 +47,7 @@ const DashboardSideBar = () => {
   ]
   return (
     <aside className="w-1/5 bg-white rounded-md shadow flex flex-col items-start justify-center mt-2">
-    
     <DashBio/>
-
     <nav className="w-4/5 p-2 mt-2 m-auto flex flex-col items-start justify-center rounded-lg bg-blue-50">
         {
         links.map((link) =>(

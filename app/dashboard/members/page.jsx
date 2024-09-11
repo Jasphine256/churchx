@@ -1,5 +1,3 @@
-"use client"
-
 import DashboardSideBar from "@components/DashboardSideBar"
 import MemberView from "@components/MemberView"
 
