@@ -10,13 +10,13 @@ try {
     const plans = await Plan.find()
     
     if (plans){
-        createResponse(plans, 200)
+        return createResponse(plans, 200)
     }else{
-        createResponse("Not Found", 404)
+        return createResponse("Not Found", 404)
     }
     
 } catch (error) {
-    createResponse("An error occurred", 500)
+    return createResponse("An error occurred", 500)
     console.log("An error occurred")
 
 }

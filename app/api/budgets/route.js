@@ -1,25 +1,24 @@
 import Budget from "@models/Budget";
 import { connectToDb } from "@utils/database";
 
-export async function GET(request){
-try {
-    //connecting to database
-    await connectToDb()
+export async function GET(request) {
+    try {
+        // Connecting to database
+        await connectToDb();
 
-    // fetching all data
-    const budgets = await Budget.find()
-    
-    if (budgets){
-        createResponse(budgets, 200)
-    }else{
-        createResponse("Not Found", 404)
+        // Fetching all data
+        const budgets = await Budget.find();
+
+        if (budgets) {
+            return createResponse(budgets, 200);
+        } else {
+            return createResponse("Not Found", 404);
+        }
+        
+    } catch (error) {
+        console.error("An error occurred:", error);
+        return createResponse("An error occurred", 500);
     }
-    
-} catch (error) {
-    createResponse("An error occurred", 500)
-    console.log("An error occurred")
-
-}
 }
 
 function createResponse(message, status) {
