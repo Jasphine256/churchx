@@ -1,0 +1,55 @@
+budget:{
+        name:'',
+        description:'',
+        handler:'',
+        total:'',
+        status:'',
+    }
+member:{
+        name:'',
+        address:'',
+        contact:'',
+        email:'',
+    }
+minister:{
+        name:'',
+        role:'',
+        ministry:'',
+        contact:'',
+        email:'',
+    }
+payment:{
+	    type:"",
+        name:'',
+        date:'',
+        reason:'',
+        amount:'',
+    }
+plan:{
+        name:'',
+        description:'',
+        handler:'',
+        budget:'',
+        status:'',
+    }
+project:{
+        name:'',
+        description:'',
+        handler:'',
+        team:'',
+        budget:'',
+        startDate:'',
+    }
+task:{
+        title:'',
+        description:'',
+        handler:'',
+        startDate:'',
+        deadline:''
+    }
+visitor:{
+        name:'',
+        address:'',
+        contact:'',
+        email:'',
+    }
