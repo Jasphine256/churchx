@@ -1,14 +1,10 @@
-import Project from "@models/Project";
-import { connectToDb } from "@utils/database";
+import { readDocumentById } from "@utils/database"
 
 export async function GET(request){
     const {id} = request.query
 try {
-    //connecting to database
-    await connectToDb()
-
-    // fetching all data
-    const project = Project.findOne({id})
+ 
+    const project = await readDocumentById(id)
     
     if (project){
         createResponse(project, 200)

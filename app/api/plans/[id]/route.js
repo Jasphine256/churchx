@@ -1,14 +1,10 @@
-import Plan from "@models/Plan";
-import { connectToDb } from "@utils/database";
+import { readDocumentById } from "@utils/database"
 
 export async function GET(request){
     const {id} = request.query
 try {
-    //connecting to database
-    await connectToDb()
-
-    // fetching all data
-    const plan = Plan.findOne({id})
+    
+    const plan = await readDocumentById(id)
     
     if (plan){
         createResponse(plan, 200)

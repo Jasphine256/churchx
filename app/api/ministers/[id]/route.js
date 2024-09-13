@@ -1,5 +1,4 @@
-import Minister from "@models/Minister";
-import { connectToDb } from "@utils/database";
+import { readDocumentById } from "@utils/database"
 
 export async function GET(request){
     const {id} = request.query
@@ -8,7 +7,7 @@ try {
     await connectToDb()
 
     // fetching all data
-    const minister = Minister.findOne({id})
+    const minister = await readDocumentById(id)
     
     if (minister){
         createResponse(minister, 200)

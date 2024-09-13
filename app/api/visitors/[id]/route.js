@@ -1,14 +1,10 @@
-import Visitor from "@models/Visitor";
-import { connectToDb } from "@utils/database";
+import { readDocumentById } from "@utils/database"
 
 export async function GET(request){
     const {id} = request.query
 try {
-    //connecting to database
-    await connectToDb()
 
-    // fetching all data
-    const visitor = Visitor.findOne({id})
+    const visitor = await readDocumentById(id)
     
     if (visitor){
         createResponse(visitor, 200)

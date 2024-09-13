@@ -1,14 +1,9 @@
-import Payment from "@models/Payment";
-import { connectToDb } from "@utils/database";
+import { readDocumentById } from "@utils/database"
 
 export async function GET(request){
     const {id} = request.query
 try {
-    //connecting to database
-    await connectToDb()
-
-    // fetching all data
-    const payment = Payment.findOne({id})
+    const payment = await readDocumentById(id)
     
     if (payment){
         createResponse(payment, 200)

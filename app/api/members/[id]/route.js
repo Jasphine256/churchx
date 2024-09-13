@@ -1,14 +1,10 @@
-import Member from "@models/Member";
-import { connectToDb } from "@utils/database";
+import { readDocumentById } from "@utils/database"
 
 export async function GET(request){
     const {id} = request.query
 try {
-    //connecting to database
-    await connectToDb()
-
-    // fetching all data
-    const member = Member.findOne({id})
+    
+    const member = await readDocumentById(id)
     
     if (member){
         createResponse(member, 200)

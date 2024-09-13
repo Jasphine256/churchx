@@ -1,14 +1,10 @@
-import Budget from "@models/Budget";
-import { connectToDb } from "@utils/database";
+import { readDocumentById } from "@utils/database"
 
 export async function GET(request){
     const {id} = request.query
 try {
-    //connecting to database
-    await connectToDb()
-
-    // fetching all data
-    const budget = Budget.findOne({id})
+   
+    const budget = await readDocumentById(id)
     
     if (budget){
         createResponse(budget, 200)
