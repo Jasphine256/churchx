@@ -1,25 +1,21 @@
-import Payment from "@models/Payment";
-import { connectToDb } from "@utils/database";
+import { readDocuments } from "@utils/database"
 
 export async function GET(request){
-try {
-    //connecting to database
-    await connectToDb()
+    try {
 
-    // fetching all data
-    const payments = await Payment.find()
-    
-    if (payments){
-        return createResponse(payments, 200)
-    }else{
-        return createResponse("Not Found", 404)
+        const payments = await readDocuments("Payments")
+        
+        if (payments){
+            return createResponse(payments, 200)
+        }else{
+            return createResponse("Not Found", 404)
+        }
+        
+    } catch (error) {
+        return createResponse("An error occurred", 500)
+        console.log("An error occurred")
+
     }
-    
-} catch (error) {
-    return createResponse("An error occurred", 500)
-    console.log("An error occurred")
-
-}
 }
 
 function createResponse(message, status) {

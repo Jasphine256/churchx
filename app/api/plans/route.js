@@ -1,25 +1,20 @@
-import Plan from "@models/Plan";
-import { connectToDb } from "@utils/database";
+import { readDocuments } from "@utils/database"
 
 export async function GET(request){
-try {
-    //connecting to database
-    await connectToDb()
+    try {
+        //connecting to database
+        const plans = await readDocuments("Plans")
 
-    // fetching all data
-    const plans = await Plan.find()
-    
-    if (plans){
-        return createResponse(plans, 200)
-    }else{
-        return createResponse("Not Found", 404)
+        if (plans){
+            return createResponse(plans, 200)
+        }else{
+            return createResponse("Not Found", 404)
+        }
+        
+    } catch (error) {
+        console.log("An error occurred")
+        return createResponse("An error occurred", 500)
     }
-    
-} catch (error) {
-    return createResponse("An error occurred", 500)
-    console.log("An error occurred")
-
-}
 }
 
 function createResponse(message, status) {

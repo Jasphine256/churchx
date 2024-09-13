@@ -1,25 +1,18 @@
-import { connectToDb } from "@utils/database";
-import Budget from "@models/Budget";
+import { createDocument } from "@utils/database";
 
 export async function POST(request) {
     try {
         // Extract the budget data from the request body
-        const budgetData =  await request.json();
-        const {creator, handler, name} = budgetData
+        const {creator, name, description, handler, total, status} = await request.json();
 
-        // Connect to the database
-        await connectToDb();
-
-        // Check if the budget already exists
-        const budgetExists = await Budget.findOne({ creator, handler, name });
-
-        if (budgetExists) {
-            return createResponse("Budget already exists!", 200);
-        }
-
-        // Create and save the new budget entry
-        const newBudget = new Budget(budgetData);
-        await newBudget.save();
+        await createDocument("Budgets", {
+            creator:creator,
+            name:name,
+            description:description,
+            handler:handler,
+            total:total,
+            status:status
+        })
 
         return createResponse("Budget saved successfully!", 201);
     } catch (error) {

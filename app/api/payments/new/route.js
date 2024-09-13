@@ -1,26 +1,18 @@
-import { connectToDb } from "@utils/database";
-import Payment from "@models/Payment";
+import { createDocument } from "@utils/database";
 
 export async function POST(request) {
     try {
         // Extract payment data from the request body
-        const paymentData = await request.json()
-        const { creator, type, reason } = paymentData;
+        const { creator, type, reason, name, amount, date } = await request.json()
 
-        // Connect to the database
-        await connectToDb();
-
-        // Check if the payment already exists
-        const paymentExists = await Payment.findOne({ creator, type, reason });
-
-        if (paymentExists) {
-            return createResponse(response, "Payment already made", 200);
-        }
-
-        // Create and save the new payment entry
-        const newPayment = new Payment(paymentData);
-        await newPayment.save();
-
+        await createDocument("Payments", {
+            creator:creator,
+            type:type,
+            name:name,
+            date:date,
+            reason:reason,
+            amount:amount,
+        })
         return createResponse(response, "Payment made successfully", 201);
     } catch (error) {
         console.error("Error making payment:", error);

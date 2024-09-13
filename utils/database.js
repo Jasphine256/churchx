@@ -1,31 +1,138 @@
-import mongoose from "mongoose"
+import { db } from "./firebase";
+import { collection, doc, addDoc, getDoc, getDocs , updateDoc, deleteDoc} from "firebase/firestore";
+import { query, where } from "firebase/firestore";
 
-// Keeping track of connection status with a reference
-let connection = false
+// Function to add a document
+export const addDocument = async (collection_name, object) => {
+  try {
+    const docRef = await addDoc(collection(db, collection_name),object)
+    console.log("__________________________________________")
+    console.log('Document successfully added!');
+    console.log("__________________________________________")
 
-export const connectToDb = async () => {
-    mongoose.set('strictQuery', true)
+  } catch (error) {
+    console.log("__________________________________________")
+    console.error('Error adding document: ', error);
+    console.log("__________________________________________")
 
-    // If a connection already exists, use it
-    if (connection) {
-        console.log('_________________________________________________________')
-        console.log('DATABASE ALREADY CONNECTED')
-        console.log('_________________________________________________________')
-        return
+  }
+};
+
+
+// Function to fetch a single document
+export const getUser = async (collection_name, email) => {
+  try {
+      const q = query(collection(
+        db,
+        collection_name),
+        where("email", "==", ''+email+'')
+      );
+
+      const docSnap = await getDocs(q);
+      if (docSnap.empty) {
+          return false
+      }      
+      return docSnap
+  } catch (error) {
+    console.error('Error getting document:', error);
+  }
+};
+
+
+export const createDocument = async (collectionName, data) => {
+  try {
+    const docRef = await addDoc(collection(db, collectionName), data);
+    console.log("Document written with ID: ", docRef.id);
+    return true
+  } catch (e) {
+    console.log("__________________________________________")
+    console.error("Error adding document: ", e);
+    console.log("__________________________________________")
+  }
+};
+
+
+export const readDocuments = async (collectionName) => {
+  try {
+    const querySnapshot = await getDocs(collection(db, collectionName));
+    const documents = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    return documents;
+  } catch (e) {
+    console.error("Error getting documents: ", e);
+    return [];
+  }
+};
+
+
+export const readDocumentById = async (collectionName, docId) => {
+  try {
+    const docRef = doc(db, collectionName, docId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() };
+    } else {
+      console.log("No such document!");
+      return null;
+    }
+  } catch (e) {
+    console.error("Error getting document: ", e);
+    return null;
+  }
+};
+
+
+export const readDocumentByField = async (collectionName, fieldName, value) => {
+  try {
+    // Create a query against the collection
+    const q = query(collection(db, collectionName), where(fieldName, "==", value));
+    
+    // Execute the query
+    const querySnapshot = await getDocs(q);
+
+    // Check if any documents were found
+    if (querySnapshot.empty) {
+      console.log("No matching documents found.");
+      return null; // Return null if no documents match the query
     }
 
-    try {
-        await mongoose.connect(process.env.MONGODB_URI, {
-            dbName: 'church-x',
-        });
-        console.log('_________________________________________________________')
-        console.log('CONNECTION TO DATABASE SUCCESSFUL')
-        console.log('_________________________________________________________')
-        connection = true
+    // Assuming that you only expect one document
+    const documents = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
 
-    } catch (error) {
-        console.log('_________________________________________________________')
-        console.log('DATABASE CONNECTION ERROR :\n', error)
-        console.log('_________________________________________________________')
-    }
+    // Return the first document if multiple documents are returned
+    return documents[0] || null;
+
+  } catch (e) {
+    console.error("Error getting documents: ", e);
+    return null; // Return null in case of an error
+  }
+};
+
+
+export const updateDocument = async (collectionName, docId, updatedData) => {
+  try {
+    const docRef = doc(db, collectionName, docId);
+    await updateDoc(docRef, updatedData);
+    return { success: true, message: "Document updated successfully." };
+  } catch (e) {
+    console.error("Error updating document: ", e);
+    return { success: false, message: "Error updating document." };
+  }
+};
+
+
+export const deleteDocument = async (collectionName, docId) => {
+  try {
+    const docRef = doc(db, collectionName, docId);
+    await deleteDoc(docRef);
+    return { success: true, message: "Document deleted successfully." };
+  } catch (e) {
+    console.error("Error deleting document: ", e);
+    return { success: false, message: "Error deleting document." };
+  }
 };

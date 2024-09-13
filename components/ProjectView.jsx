@@ -9,17 +9,16 @@ const ProjectView = () => {
 
     const [fetchTrigger, setFetchTrigger] = useState(0)
 
-    const [savedTasks, setTasks] = useState({})
+    const [loading, setLoading] = useState(true)
 
-    useEffect(()=>{
-        const fetchData = async () =>{
-            const response = await fetch('/api/projects')
-            const data = await response.json()
-            setTasks(data)
-            console.log(data)
-        }
-        fetchData()
-    },[fetchTrigger])
+    const [fechedData, setFetchedData] = useState([{
+        name:'',
+        description:'',
+        handler:'',
+        team:'',
+        budget:'',
+        startDate:'',
+    }])
 
     const [formData, setFormData] = useState({
         name:'',
@@ -57,58 +56,22 @@ const ProjectView = () => {
             startDate:'',
         })
         setModalVisible(false)
+        setFetchTrigger((prev)=>{prev+1})
     }
 
-    const projects = [
-        {
-            name: 'Mikhael Jasper',
-            project: 'Ignite Mobile App',
-            budget: 'UGX 7,405,000',
-            startDate: '22-10-2003'
-        },
-        {
-            name: 'Jubilee Gold',
-            project: 'Ignite website',
-            budget: 'UGX 7,405,000',
-            startDate: '22-10-2003'
-        },
-        {
-            name: 'Sera Baibe',
-            project: 'Tuesday Flyer',
-            budget: 'UGX 7,405,000',
-            startDate: '26-11-2020'
-        },
-        {
-            name: 'Serungogi Henry',
-            project: '3 TikTok Videos',
-            budget: 'UGX 7,405,000',
-            startDate: '22-10-2003'
-        },
-        {
-            name: 'Daphine Browe',
-            project: 'Ignite Mobile App',
-            budget: 'UGX 7,405,000',
-            startDate: '26-11-2020'
-        },
-        {
-            name: 'Jubilee Gold',
-            project: 'Ignite website',
-            budget: 'UGX 7,405,000',
-            startDate: '26-11-2020'
-        },
-        {
-            name: 'Ssuna Bruno',
-            project: 'Tuesday Flyer',
-            budget: 'UGX 7,405,000',
-            startDate: '26-11-2020'
-        },
-        {
-            name: 'Ssuna Bruno',
-            project: '3 TikTok Videos',
-            budget: 'UGX 7,405,000',
-            startDate: '22-10-2003'
+    useEffect(()=>{
+        const fetchData = async () =>{
+            const response = await fetch('/api/projects')
+            const data = await response.json()
+            setFetchedData(data.message)
         }
-    ]
+        fetchData()
+        setLoading(false)
+    },[fetchTrigger])
+
+    if (loading){
+        return(<></>)
+    }
   return (
     <div className="w-4/5 flex flex-col items-center justify-center">
 
@@ -121,9 +84,9 @@ const ProjectView = () => {
             </div>
             <div className="w-full p-4 flex flex-col items-center justify-start h-[78vh] overflow-y-auto overflow-x-hidden">
                 {
-                    projects.map((project)=>(
-                        <div key={project.name} className="w-full" onClick={()=>{openModal({type:'project', id:project.name})}}>
-                            <ListWidget fields={['name', 'handler', 'budget', 'start date']} values={[project.project, project.name, project.budget, project.startDate]}/>
+                    fechedData.map((project)=>(
+                        <div key={project.id} className="w-full" onClick={()=>{openModal({type:'project', id:project.id})}}>
+                            <ListWidget fields={['name', 'handler', 'budget', 'startDate']} values={[project.name, project.handler, project.budget, project.startDate]}/>
                         </div>
                     ))
                 }

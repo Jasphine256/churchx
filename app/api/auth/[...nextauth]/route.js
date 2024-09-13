@@ -1,7 +1,6 @@
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-import { connectToDb } from '@utils/database'
-import User from '@models/User'
+import { getUser, createDocument, readDocumentByField,  } from '@utils/database'
 
 const handler = NextAuth({
     providers: [
@@ -14,12 +13,10 @@ const handler = NextAuth({
     callbacks: {
         async signIn({ user, account, profile }) {
             try {
-                await connectToDb()
-
-                const userExists = await User.findOne({ email: user.email })
-    
-                if (!userExists) {
-                    await User.create({
+                const docExists = await getUser("Users", user.email)
+                if (docExists==false){
+                    console.log("creating new user")
+                    createDocument("Users", {
                         name: profile.name,
                         email: user.email,
                         image: profile.picture,
@@ -28,12 +25,11 @@ const handler = NextAuth({
                 return true
             } catch (error) {
                 console.log(error)
-                return false
             }
         },
 
         async session({ session, token}) {
-            const sessionUser = await User.findOne({email:session.user.email})
+            const sessionUser = readDocumentByField("Users", "email", session.user.email)
             session.user.id = token.sub; // Add user ID to the session
             return session;
         },

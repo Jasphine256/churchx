@@ -10,17 +10,16 @@ const PlanView = () => {
 
     const [fetchTrigger, setFetchTrigger] = useState(0)
 
-    const [fetchedData, setFetchedData] = useState({})
-    
-    useEffect(()=>{
-        const fetchData = async () =>{
-            const response = await fetch('/api/plans')
-            const data = await response.json()
-            setFetchedData(data)
-        }
-        fetchData()
-    }, [fetchTrigger])
+    const [loading, setLoading] = useState(true)
 
+    const [fetchedData, setFetchedData] = useState([{
+        name:'',
+        description:'',
+        handler:'',
+        budget:'',
+        status:'',
+    }])
+    
     const [formData, setFormData] = useState({
         name:'',
         description:'',
@@ -54,6 +53,7 @@ const PlanView = () => {
             status:'',
         })
         setModalVisible(false)
+        setFetchTrigger((prev)=>{prev+1})
     }
 
     const statistics = [
@@ -73,56 +73,20 @@ const PlanView = () => {
             icon: '/assets/icons/visitor.png'
         },
     ]
-    const plans = [
-        {
-            name: 'Mikhael Jasper',
-            plan: 'Ignite Mobile App',
-            budget: 'UGX 7,405,000',
-            status: 'Executed'
-        },
-        {
-            name: 'Jubilee Gold',
-            plan: 'Ignite website',
-            budget: 'UGX 7,405,000',
-            status: 'Executed'
-        },
-        {
-            name: 'Sera Baibe',
-            plan: 'Tuesday Flyer',
-            budget: 'UGX 7,405,000',
-            status: 'Pending'
-        },
-        {
-            name: 'Serungogi Henry',
-            plan: '3 TikTok Videos',
-            budget: 'UGX 7,405,000',
-            status: 'Executed'
-        },
-        {
-            name: 'Daphine Browe',
-            plan: 'Ignite Mobile App',
-            budget: 'UGX 7,405,000',
-            status: 'Pending'
-        },
-        {
-            name: 'Jubilee Gold',
-            plan: 'Ignite website',
-            budget: 'UGX 7,405,000',
-            status: 'Pending'
-        },
-        {
-            name: 'Ssuna Bruno',
-            plan: 'Tuesday Flyer',
-            budget: 'UGX 7,405,000',
-            status: 'Pending'
-        },
-        {
-            name: 'Ssuna Bruno',
-            plan: '3 TikTok Videos',
-            budget: 'UGX 7,405,000',
-            status: 'Executed'
+
+    useEffect(()=>{
+        const fetchData = async () =>{
+            const response = await fetch('/api/plans')
+            const data = await response.json()
+            setFetchedData(data.message)
         }
-    ]
+        fetchData()
+        setLoading(false)
+    },[fetchTrigger])
+
+    if(loading){
+        return(<></>)
+    }
 
   return (
     <div className="w-4/5 flex flex-col items-center justify-center">
@@ -146,9 +110,9 @@ const PlanView = () => {
             </div>
             <div className="w-full p-4 flex flex-col items-center justify-start h-[62vh] overflow-y-auto overflow-x-hidden">
                 {
-                    plans.map((plan)=>(
-                        <div key={plan.name} className="w-full" onClick={()=>{openModal({type:'plan', id:plan.name})}}>
-                            <ListWidget fields={['name', 'handler', 'budget', 'status']} values={[plan.plan, plan.name, plan.budget, plan.status]}/>
+                    fetchedData.map((plan)=>(
+                        <div key={plan.id} className="w-full" onClick={()=>{openModal({type:'plan', id:plan.id})}}>
+                            <ListWidget fields={['name', 'handler', 'budget', 'status']} values={[plan.name, plan.handler, plan.budget, plan.status]}/>
                         </div>
                     ))
                 }

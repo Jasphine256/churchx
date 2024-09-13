@@ -10,17 +10,14 @@ const TasksView = () => {
 
     const [fetchTrigger, setFetchTrigger] = useState(0)
 
-    const [savedTasks, setTasks] = useState({})
+    const [loading, setLoading] = useState(true)
 
-    useEffect(()=>{
-        const fetchData = async () =>{
-            const response = await fetch('/api/tasks')
-            const data = await response.json()
-            setTasks(data)
-            console.log(data)
-        }
-        fetchData()
-    },[fetchTrigger])
+    const [savedTasks, setTasks] = useState([{
+        title:'',
+        handler:'',
+        deadline:'',
+        status:''
+    }])
 
     const [formData, setFormData] = useState({
         title: '',
@@ -55,6 +52,7 @@ const TasksView = () => {
             deadline: '',
         })
         setModalVisible(false)
+        setFetchTrigger((prev)=>{prev+1})
     }
 
     const statistics = [
@@ -74,56 +72,20 @@ const TasksView = () => {
             icon: '/assets/icons/visitor.png'
         },
     ]
-    const tasks = [
-        {
-            name: 'Mikhael Jasper',
-            task: 'Ignite Mobile App',
-            deadline: '22-10-2003',
-            status: 'Finished'
-        },
-        {
-            name: 'Jubilee Gold',
-            task: 'Ignite website',
-            deadline: '04-07-2005',
-            status: 'Delayed'
-        },
-        {
-            name: 'Sera Baibe',
-            task: 'Tuesday Flyer',
-            deadline: '26-11-2020',
-            status: 'Pending'
-        },
-        {
-            name: 'Serungogi Henry',
-            task: '3 TikTok Videos',
-            deadline: '08-08-2024',
-            status: 'Delayed'
-        },
-        {
-            name: 'Daphine Browe',
-            task: 'Ignite Mobile App',
-            deadline: '22-10-2003',
-            status: 'Finished'
-        },
-        {
-            name: 'Jubilee Gold',
-            task: 'Ignite website',
-            deadline: '04-07-2005',
-            status: 'Delayed'
-        },
-        {
-            name: 'Ssuna Bruno',
-            task: 'Tuesday Flyer',
-            deadline: '26-11-2020',
-            status: 'Pending'
-        },
-        {
-            name: 'Ssuna Bruno',
-            task: '3 TikTok Videos',
-            deadline: '08-08-2024',
-            status: 'Delayed'
+
+    useEffect(()=>{
+        const fetchData = async () =>{
+            const response = await fetch('/api/tasks')
+            const data = await response.json()
+            setTasks(data.message)
         }
-    ]
+        fetchData()
+        setLoading(false)
+    },[fetchTrigger])
+
+    if (loading){
+        return(<></>)
+    }
   return (
     <div className="w-4/5 flex flex-col items-center justify-center">
         <section className="w-full m-3 mt-5 flex flex-row flex-wrap items-center justify-evenly">
@@ -146,9 +108,9 @@ const TasksView = () => {
             </div>
             <div className="w-full p-4 flex flex-col items-center justify-start h-[62vh] overflow-y-auto overflow-x-hidden">
                 {
-                    tasks.map((task)=>(
-                        <div className="w-full" key={task.task} onClick={()=>{openModal({type:'task', id:task.name})}}>
-                            <ListWidget fields={['title', 'handler', 'deadline', 'status']} values={[task.task, task.name, task.deadline, task.status]}/>
+                    savedTasks.map((task)=>(
+                        <div className="w-full" key={task.id} onClick={()=>{openModal({type:'task', id:task.id})}}>
+                            <ListWidget fields={['title', 'handler', 'deadline', 'status']} values={[task.title, task.handler, task.deadline, task.status]}/>
                         </div>
 
                     ))

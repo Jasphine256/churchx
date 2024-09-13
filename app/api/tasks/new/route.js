@@ -1,28 +1,27 @@
-import { connectToDb } from "@utils/database";
-import Task from "@models/Task";
+import { createDocument } from "@utils/database";
 
 // Handler function for adding a new task
 export async function POST(request) {
     try {
         // Extracting data from the request body
-        const taskData = await request.json();
-        const { creator, title } = taskData;
 
-        // Connect to the database
-        await connectToDb();
+        const { creator, title, description, handler, startDate, deadline, status } = await request.json();
 
-        // Check if the task already exists
-        const taskExists = await Task.findOne({ title, creator });
+        const created = await createDocument("Tasks", {
+            creator:creator,
+            title:title,
+            handler:handler,
+            description:description,
+            startDate:startDate,
+            deadline:deadline,
+            status:status
+        })
 
-        if (taskExists) {
-            return createResponse("Task already exists", 200);
+        if (created){
+            return createResponse("Task saved successfully", 201);
         }
+        return createResponse("Error occurred", 500)
 
-        // Create and save the new task
-        const newTask = new Task(taskData);
-        await newTask.save();
-
-        return createResponse("Task saved successfully", 201);
     } catch (error) {
         console.error("Error while adding task:", error);
         return createResponse("Failed to save task", 500);

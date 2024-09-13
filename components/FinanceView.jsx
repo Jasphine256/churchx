@@ -10,17 +10,9 @@ const FinanceView = () => {
 
     const [fetchTrigger, setFetchTrigger] = useState(0)
 
-    const [savedTasks, setTasks] = useState({})
+    const [loading, setLoading] = useState(true)
 
-    useEffect(()=>{
-        const fetchData = async () =>{
-            const response = await fetch('/api/payments')
-            const data = await response.json()
-            setTasks(data)
-            console.log(data)
-        }
-        fetchData()
-    },[fetchTrigger])
+    const [fetchData, setFetchedData] = useState([])
 
     const [formData, setFormData] = useState({
         name:'',
@@ -67,6 +59,7 @@ const FinanceView = () => {
             amount:'',
         })
         setModalVisible(false)
+        setFetchTrigger((prev)=>{prev+1})
     }
 
     const stats = [
@@ -148,6 +141,21 @@ const FinanceView = () => {
             date: '07-01-2023'
         }
     ]
+
+    useEffect(()=>{
+        const fetchData = async () =>{
+            const response = await fetch('/api/members')
+            const data = await response.json()
+            setFetchedData(data.message)
+        }
+        fetchData()
+        setLoading(false)
+    },[fetchTrigger])
+
+    if (loading){
+        return(<></>)
+    }
+
   return (
     <div className="w-4/5 flex flex-col items-center justify-center">
         <section className="w-full m-3 mt-5 flex flex-row flex-wrap items-center justify-evenly">

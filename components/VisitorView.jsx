@@ -9,17 +9,15 @@ const VisitorView = () => {
 
     const [fetchTrigger, setFetchTrigger] = useState(0)
 
-    const [fetchedData, setFetchedData] = useState({})
-    
-    useEffect(()=>{
-        const fetchData = async () =>{
-            const response = await fetch('/api/visitors')
-            const data = await response.json()
-            setFetchedData(data)
-        }
-        fetchData()
-    }, [fetchTrigger])
+    const [loading, setLoading] = useState(true)
 
+    const [fetchedData, setFetchedData] = useState([{
+        name:'',
+        address:'',
+        contact:'',
+        email:'',
+    }])
+    
     const [formData, setFormData] = useState({
         name:'',
         address:'',
@@ -50,59 +48,23 @@ const VisitorView = () => {
             email:'',
         })
         setModalVisible(false)
+        setFetchTrigger((prev)=>{prev+1})
     }
 
-    const visitors = [
-        {
-            visitor: 'Mikhael Jasper',
-            address: 'kampala',
-            email: 'mikhael@jasphine.com',
-            contact: '0783946667'
-        },
-        {
-            visitor: 'Jubilee Gold',
-            address: 'Salaama',
-            email: 'gold@jasphine.com',
-            contact: '0783946667'
-        },
-        {
-            visitor: 'Sera Baibe',
-            address: 'Makindye',
-            email: 'janedoe@jasphine.com',
-            contact: '0745201484'
-        },
-        {
-            visitor: 'Serungogi Henry',
-            address: 'Mukono',
-            email: 'hen@jasphine.com',
-            contact: '0783946667'
-        },
-        {
-            visitor: 'Daphine Browe',
-            address: 'Ndeeba',
-            email: 'daphy@mikky.com',
-            contact: '0745201484'
-        },
-        {
-            visitor: 'Ssuna Bruno',
-            address: 'Ndeeba',
-            email: 'bruno@navi.com',
-            contact: '0745201484'
-        },
-        {
-            visitor: 'Mikhael Jasper',
-            address: 'kampala',
-            email: 'jasper@jasphine.com',
-            contact: '0783946667'
-        },
-        {
-            visitor: 'Jubilee Gold',
-            address: 'Salaama',
-            email: 'gold@jasphine.com',
-            contact: '0783946667'
-        },
+    useEffect(()=>{
+        const fetchData = async () =>{
+            const response = await fetch('/api/visitors')
+            const data = await response.json()
+            setFetchedData(data.message)
+        }
+        fetchData()
+        setLoading(false)
+    },[fetchTrigger])
 
-    ]
+    if(loading){
+        return(<></>)
+    }
+
   return (
     <div className="w-4/5 flex flex-col items-center justify-center">
 
@@ -115,9 +77,9 @@ const VisitorView = () => {
             </div>
             <div className="w-full p-4 flex flex-col items-center justify-start h-[78vh] overflow-y-auto overflow-x-hidden">
                 {
-                    visitors.map((visitor)=>(
-                        <div className="w-full" key={visitor.email} onClick={()=>{openModal({type:'visitor', email:visitor.email})}}>
-                            <ListWidget fields={['name', 'email', 'contact', 'address']} values={[visitor.visitor, visitor.email, visitor.contact, visitor.address]}/>
+                    fetchedData.map((visitor)=>(
+                        <div className="w-full" key={visitor.id} onClick={()=>{openModal({type:'visitor', email:visitor.email})}}>
+                            <ListWidget fields={['name', 'email', 'contact', 'address']} values={[visitor.name, visitor.email, visitor.contact, visitor.address]}/>
                         </div>
                     ))
                 }

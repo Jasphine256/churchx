@@ -1,25 +1,18 @@
-import { connectToDb } from "@utils/database";
-import Plan from "@models/Plan";
+import { createDocument } from "@utils/database";
 
 export async function POST(request) {
     try {
         // Extract plan data from the request body
-        const planData = await request.json()
-        const { creator, name} = planData;
+        const { creator, name, description, handler, budget, status} = await request.json()
 
-        // Connect to the database
-        await connectToDb();
-
-        // Check if the plan already exists
-        const planExists = await Plan.findOne({ creator, name });
-
-        if (planExists) {
-            return createResponse("Plan already exists", 200);
-        }
-
-        // Create and save the new plan entry
-        const newPlan = new Plan(planData);
-        await newPlan.save();
+        await createDocument("Plans", {
+            creator:creator,
+            name:name,
+            description:description,
+            handler:handler,
+            budget:budget,
+            status:status,
+        })
 
         return createResponse("Plan saved successfully", 201);
     } catch (error) {

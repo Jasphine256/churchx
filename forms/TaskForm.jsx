@@ -11,7 +11,8 @@ export const TaskForm = (props) => {
         description:'',
         handler:'',
         startDate:'',
-        deadline:''
+        deadline:'',
+        status:'',
     })
 
     const handleChange = (e) => {
@@ -24,12 +25,13 @@ export const TaskForm = (props) => {
             const response = await fetch('/api/tasks/new', {
                 method:'POST',
                 body:JSON.stringify({
-                    creator:session.user.email,
+                    creator:session?.user.email,
                     title:formData.title,
                     description:formData.description,
                     handler:formData.handler,
                     startDate:formData.startDate,
                     deadline:formData.deadline,
+                    status:formData.status,
                 })
             })
             console.log(response)
@@ -69,6 +71,10 @@ export const TaskForm = (props) => {
         <div className="w-full py-1">
             <label htmlFor="deadline" className=" text-gray-800">Deadline</label> <br />
             <input type="date" defaultValue={props.deadline} name="deadline" id="deadline" className="w-full p-1 bg-transparent border border-gray-400 rounded px-3 outline-0" onChange={handleChange}/>
+        </div>
+        <div className="w-full py-1">
+            <label htmlFor="status" className=" text-gray-800">Status</label> <br />
+            <input type="text" name="status" id="status" defaultValue={props.status} className="w-full p-1 bg-transparent border border-gray-400 rounded px-3 outline-0" onChange={handleChange}/>
         </div>
         <div className="w-full flex items-center justify-center p-2">
             <input type="submit" value="Save" className="p-1 bg-blue-500 shadow rounded-full text-white px-4 cursor-pointer"/>

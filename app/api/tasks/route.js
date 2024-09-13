@@ -1,25 +1,20 @@
-import Task from "@models/Task";
-import { connectToDb } from "@utils/database";
+import { readDocuments } from "@utils/database"
 
 export async function GET(request){
-try {
-    //connecting to database
-    await connectToDb()
+    try {
 
-    // fetching all data
-    const tasks = await Task.find()
-    
-    if (tasks){
-        return createResponse(tasks, 200)
-    }else{
-        return createResponse("Not Found", 404)
+        const tasks = await readDocuments("Tasks")
+        
+        if (tasks){
+            return createResponse(tasks, 200)
+        }else{
+            return createResponse("Not Found", 404)
+        }
+        
+    } catch (error) {
+        console.log("An error occurred")
+        return createResponse("An error occurred", 500)
     }
-    
-} catch (error) {
-    return createResponse("An error occurred", 500)
-    console.log("An error occurred")
-
-}
 }
 
 function createResponse(message, status) {

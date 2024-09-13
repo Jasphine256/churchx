@@ -9,17 +9,16 @@ const MinisterView = () => {
 
     const [fetchTrigger, setFetchTrigger] = useState(0)
 
-    const [fetchedData, setFetchedData] = useState({})
-    
-    useEffect(()=>{
-        const fetchData = async () =>{
-            const response = await fetch('/api/ministers')
-            const data = await response.json()
-            setFetchedData(data)
-        }
-        fetchData()
-    }, [fetchTrigger])
+    const [loading, setLoading] = useState(true)
 
+    const [fetchedData, setFetchedData] = useState([{
+        name:'',
+        role:'',
+        ministry:'',
+        contact:'',
+        email:'',
+    }])
+    
     const [formData, setFormData] = useState({
         name:'',
         role:'',
@@ -53,59 +52,22 @@ const MinisterView = () => {
             email:'',
         })
         setModalVisible(false)
+        setFetchTrigger((prev)=>{prev+1})
     }
+    
+    useEffect(()=>{
+        const fetchData = async () =>{
+            const response = await fetch('/api/ministers')
+            const data = await response.json()
+            setFetchedData(data.message)
+        }
+        fetchData()
+        setLoading(false)
+    },[fetchTrigger])
 
-    const ministers = [
-        {
-            minister: 'Mikhael Jasper',
-            ministry: 'Technology',
-            role: 'Software Enginner',
-            contact: '0783946667'
-        },
-        {
-            minister: 'Jubilee Gold',
-            ministry: 'Music',
-            role: 'Team Lead',
-            contact: '0783946667'
-        },
-        {
-            minister: 'Sera Baibe',
-            ministry: 'Media',
-            role: 'Graphics Designer',
-            contact: '0745201484'
-        },
-        {
-            minister: 'Serungogi Henry',
-            ministry: 'Media',
-            role: 'Videography',
-            contact: '0783946667'
-        },
-        {
-            minister: 'Daphine Browe',
-            ministry: 'Media',
-            role: 'Journalism',
-            contact: '0745201484'
-        },
-        {
-            minister: 'Ssuna Bruno',
-            ministry: 'MultiMedia',
-            role: 'Production',
-            contact: '0745201484'
-        },
-        {
-            minister: 'Mikhael Jasper',
-            ministry: 'Technology',
-            role: 'Software Enginner',
-            contact: '0783946667'
-        },
-        {
-            minister: 'Jubilee Gold',
-            ministry: 'Music',
-            role: 'Team Lead',
-            contact: '0783946667'
-        },
-
-    ]
+    if (loading){
+        return(<></>)
+    }
   return (
     <div className="w-4/5 flex flex-col items-center justify-center">
 
@@ -118,9 +80,9 @@ const MinisterView = () => {
             </div>
             <div className="w-full p-4 flex flex-col items-center justify-start h-[78vh] overflow-y-auto overflow-x-hidden">
                 {
-                    ministers.map((minister)=>(
-                        <div className="w-full" key={minister.minister} onClick={()=>{openModal({type:'minister', id:minister.name})}}>
-                            <ListWidget fields={['name', 'role', 'ministry', 'contact']} values={[minister.minister, minister.role, minister.ministry, minister.contact]}/>
+                    fetchedData.map((minister)=>(
+                        <div className="w-full" key={minister.id} onClick={()=>{openModal({type:'minister', id:minister.name})}}>
+                            <ListWidget fields={['name', 'role', 'ministry', 'contact']} values={[minister.name, minister.role, minister.ministry, minister.contact]}/>
                         </div>
                     ))
                 }

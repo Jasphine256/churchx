@@ -1,27 +1,19 @@
-import { connectToDb } from "@utils/database";
-import Minister from "@models/Minister";
+import { createDocument } from "@utils/database";
 
 export async function POST(request) {
     try {
         // Extract minister data from the request body
-        const ministerData = await request.json()
-        const { creator, name, contact} = ministerData;
+        const { creator, name, role, ministry, contact, email} = await request.json()
 
-        // Connect to the database
-        await connectToDb();
-
-        // Check if the minister already exists
-        const ministerExists = await Minister.findOne({ creator, contact, name });
-
-        if (ministerExists) {
-            return createResponse("Minister already exists", 200);
-        }
-
-        // Create and save the new minister entry
-        const newMinister = new Minister(ministerData);
-        await newMinister.save();
-
-        return createResponse("Minister saved successfully", 201, newMinister);
+        await createDocument("Ministers", {
+            creator:creator,
+            name:name,
+            role:role,
+            ministry:ministry,
+            contact:contact,
+            email:email,
+        })
+        return createResponse("Minister saved successfully", 201);
     } catch (error) {
         console.error("Error saving minister:", error);
         return createResponse("Failed to save minister", 500);

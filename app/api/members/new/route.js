@@ -1,25 +1,17 @@
-import { connectToDb } from "@utils/database";
-import Member from "@models/Member";
+import { createDocument } from "@utils/database";
 
 export async function POST (request) {
     try {
         // Extract member data from the request body
-        const memberData = await request.json()
-        const { creator, name, contact} = memberData;
+        const { creator, name, address, contact, email } = await request.json();
 
-        // Connect to the database
-        await connectToDb();
-
-        // Check if the member already exists
-        const memberExists = await Member.findOne({ creator, contact, name });
-
-        if (memberExists) {
-            return createResponse("Member already exists", 200);
-        }
-
-        // Create and save the new member entry
-        const newMember = new Member(memberData);
-        await newMember.save();
+        await createDocument("Members", {
+            creator:creator,
+            name:name,
+            address:address,
+            contact:contact,
+            email:email,
+        })
 
         return createResponse("Member saved to database", 201);
     } catch (error) {

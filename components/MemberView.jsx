@@ -9,20 +9,20 @@ const MemberView = () => {
 
     const [fetchTrigger, setFetchTrigger] = useState(0)
 
-    const [fetchedData, setFetchedData] = useState({})
-    
-    useEffect(()=>{
-        const fetchData = async () =>{
-            const response = await fetch('/api/members')
-            const data = await response.json()
-            setFetchedData(data)
-        }
-        fetchData()
-    }, [fetchTrigger])
+    const [loading, setLoading] = useState(true)
 
+    const [fetchedData, setFetchedData] = useState([{
+        name:'',
+        role:'',
+        ministry:'',
+        contact:'',
+        email:'',
+    }])
+    
     const [formData, setFormData] = useState({
         name:'',
-        address:'',
+        role:'',
+        ministry:'',
         contact:'',
         email:'',
     })
@@ -42,6 +42,7 @@ const MemberView = () => {
             setModalVisible(true)
         }
     }
+
     const closeModel = () =>{
         setFormData({
             name:'',
@@ -50,59 +51,23 @@ const MemberView = () => {
             email:'',
         })
         setModalVisible(false)
+        setFetchTrigger((prev)=>{prev+1})
+    }
+    
+    useEffect(()=>{
+        const fetchData = async () =>{
+            const response = await fetch('/api/members')
+            const data = await response.json()
+            setFetchedData(data.message)
+        }
+        fetchData()
+        setLoading(false)
+    },[fetchTrigger])
+
+    if (loading){
+        return(<></>)
     }
 
-    const members = [
-        {
-            member: 'Mikhael Jasper',
-            address: 'kampala',
-            email: 'mikhael@jasphine.com',
-            contact: '0783946667'
-        },
-        {
-            member: 'Jubilee Gold',
-            address: 'Salaama',
-            email: 'gold@jasphine.com',
-            contact: '0783946667'
-        },
-        {
-            member: 'Sera Baibe',
-            address: 'Makindye',
-            email: 'janedoe@jasphine.com',
-            contact: '0745201484'
-        },
-        {
-            member: 'Serungogi Henry',
-            address: 'Mukono',
-            email: 'hen@jasphine.com',
-            contact: '0783946667'
-        },
-        {
-            member: 'Daphine Browe',
-            address: 'Ndeeba',
-            email: 'daphy@mikky.com',
-            contact: '0745201484'
-        },
-        {
-            member: 'Ssuna Bruno',
-            address: 'Ndeeba',
-            email: 'bruno@navi.com',
-            contact: '0745201484'
-        },
-        {
-            member: 'Mikhael Jasper',
-            address: 'kampala',
-            email: 'jasper@jasphine.com',
-            contact: '0783946667'
-        },
-        {
-            member: 'Jubilee Gold',
-            address: 'Salaama',
-            email: 'gold@jasphine.com',
-            contact: '0783946667'
-        },
-
-    ]
   return (
     <div className="w-4/5 flex flex-col items-center justify-center">
 
@@ -115,9 +80,9 @@ const MemberView = () => {
             </div>
             <div className="w-full p-4 flex flex-col items-center justify-start h-[78vh] overflow-y-auto overflow-x-hidden">
                 {
-                    members.map((member)=>(
-                        <div onClick={()=>{openModal({type:'member', email:member.email})}} className="w-full" key={member.email}>
-                            <ListWidget fields={['name', 'email', 'contact', 'address']} values={[member.member, member.email, member.contact, member.address]}/>
+                    fetchedData.map((member)=>(
+                        <div onClick={()=>{openModal({type:'member', email:member.email})}} className="w-full" key={member.id}>
+                            <ListWidget fields={['name', 'email', 'contact', 'address']} values={[member.name, member.email, member.contact, member.address]}/>
                         </div>
                     ))
                 }

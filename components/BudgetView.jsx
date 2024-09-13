@@ -10,17 +10,16 @@ const BudgetView = () => {
 
     const [fetchTrigger, setFetchTrigger] = useState(0)
 
-    const [savedTasks, setTasks] = useState({})
+    const [loading, setLoading] = useState(true)
 
-    useEffect(()=>{
-        const fetchData = async () =>{
-            const response = await fetch('/api/budgets')
-            const data = await response.json()
-            setTasks(data)
-            console.log(data)
-        }
-        fetchData()
-    },[fetchTrigger])
+    const [fetchedData, setFetchedData] = useState([{
+        name:'',
+        description:'',
+        handler:'',
+        total:'',
+        file:'',
+        status:'',
+    }])
 
     const [formData, setFormData] = useState({
         name:'',
@@ -57,6 +56,7 @@ const BudgetView = () => {
             file:'',
             status:'',
         })
+        setFetchTrigger((prev)=>{prev+1})
         setModalVisible(false)
     }
 
@@ -77,56 +77,20 @@ const BudgetView = () => {
             icon: '/assets/icons/visitor.png'
         },
     ]
-    const budgets = [
-        {
-            name: 'Mikhael Jasper',
-            budget: 'Ignite Mobile App',
-            total: 'UGX 99000',
-            status: 'Funded'
-        },
-        {
-            name: 'Jubilee Gold',
-            budget: 'Ignite website',
-            total: 'UGX 99000',
-            status: 'Funded'
-        },
-        {
-            name: 'Sera Baibe',
-            budget: 'Tuesday Flyer',
-            total: 'UGX 99000',
-            status: 'Pending'
-        },
-        {
-            name: 'Serungogi Henry',
-            budget: '3 TikTok Videos',
-            total: 'UGX 99000',
-            status: 'Funded'
-        },
-        {
-            name: 'Daphine Browe',
-            budget: 'Ignite Mobile App',
-            total: 'UGX 99000',
-            status: 'Pending'
-        },
-        {
-            name: 'Jubilee Gold',
-            budget: 'Ignite website',
-            total: 'UGX 99000',
-            status: 'pending'
-        },
-        {
-            name: 'Ssuna Bruno',
-            budget: 'Tuesday Flyer',
-            total: 'UGX 99000',
-            status: 'Pending'
-        },
-        {
-            name: 'Ssuna Bruno',
-            budget: '3 TikTok Videos',
-            total: 'UGX 99000',
-            status: 'Funded'
+
+    useEffect(()=>{
+        const fetchData = async () =>{
+            const response = await fetch('/api/budgets')
+            const data = await response.json()
+            setFetchedData(data.message)
         }
-    ]
+        fetchData()
+        setLoading(false)
+    },[fetchTrigger])
+
+    if (loading){
+        return(<></>)
+    }
   return (
     <div className="w-4/5 flex flex-col items-center justify-center">
         <section className="w-full m-3 mt-5 flex flex-row flex-wrap items-center justify-evenly">
@@ -149,9 +113,9 @@ const BudgetView = () => {
             </div>
             <div className="w-full p-4 flex flex-col items-center justify-start h-[62vh] overflow-y-auto overflow-x-hidden">
                 {
-                    budgets.map((budget)=>(
-                        <div className="w-full" onClick={()=>{openModal({type:'budget', id:budget.budget})}} key={budget.name}>
-                            <ListWidget fields={['name', 'handler', 'total', 'status']} values={[budget.budget, budget.name, budget.total, budget.status]}/>
+                    fetchedData.map((budget)=>(
+                        <div className="w-full" onClick={()=>{openModal({type:'budget', id:budget.id})}} key={budget.id}>
+                            <ListWidget fields={['name', 'handler', 'total', 'status']} values={[budget.name, budget.handler, budget.total, budget.status]}/>
                         </div>
                     ))
                 }
