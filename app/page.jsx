@@ -17,7 +17,7 @@ const Home = () => {
     {
       name: 'Broadcast',
       url: '/features#broadcast-info',
-      icon: '/assets/icons/broadcast.png',
+      icon: '/assets/icons/message.png',
     },
     {
       name: 'Projects',
