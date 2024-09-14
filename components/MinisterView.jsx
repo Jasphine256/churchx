@@ -1,11 +1,14 @@
 'use client'
 import { useState } from "react";
 import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 import ListWidget from "./ListWidget";
 import BaseModal from "./BaseModal";
 import { MinisterForm } from "@forms/MinisterForm";
 
 const MinisterView = () => {
+
+    const {data:session} = useSession()
 
     const [fetchTrigger, setFetchTrigger] = useState(0)
 
@@ -29,15 +32,11 @@ const MinisterView = () => {
 
     const [isModalVisible, setModalVisible] = useState(false)
 
-    const openModal = (data) =>{
+    const openModal = async (data) =>{
         if (data.type == 'minister'){
-            setFormData({
-                name:'ABC',
-                role:'abc',
-                ministry:'Tech',
-                contact:'0745201484',
-                email:'mikhael@jasphine2611',
-            })
+            const response = await fetch(`/api/ministers/${data.id}`)
+            const recievedData = await response.json()
+            setFormData(recievedData.message)
             setModalVisible(true)
         }else{
             setModalVisible(true)
@@ -57,7 +56,9 @@ const MinisterView = () => {
     
     useEffect(()=>{
         const fetchData = async () =>{
-            const response = await fetch('/api/ministers')
+            const queryParams = {user:session?.user.email}
+            const queryString = new URLSearchParams(queryParams).toString()
+            const response = await fetch(`/api/ministers?${queryString}`)
             const data = await response.json()
             setFetchedData(data.message)
         }
@@ -81,7 +82,7 @@ const MinisterView = () => {
             <div className="w-full p-4 flex flex-col items-center justify-start h-[78vh] overflow-y-auto overflow-x-hidden">
                 {
                     fetchedData.map((minister)=>(
-                        <div className="w-full" key={minister.id} onClick={()=>{openModal({type:'minister', id:minister.name})}}>
+                        <div className="w-full" key={minister.id} onClick={()=>{openModal({type:'minister', id:minister.id})}}>
                             <ListWidget fields={['name', 'role', 'ministry', 'contact']} values={[minister.name, minister.role, minister.ministry, minister.contact]}/>
                         </div>
                     ))

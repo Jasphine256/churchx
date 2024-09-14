@@ -4,8 +4,11 @@ import BaseModal from "./BaseModal";
 import { useState } from "react";
 import { useEffect } from "react";
 import { MemberForm } from "@forms/MemberForm";
+import { useSession } from "next-auth/react";
 
 const MemberView = () => {
+
+    const {data:session} = useSession()
 
     const [fetchTrigger, setFetchTrigger] = useState(0)
 
@@ -29,14 +32,11 @@ const MemberView = () => {
 
     const [isModalVisible, setModalVisible] = useState(false)
 
-    const openModal = (data) =>{
+    const openModal = async (data) =>{
         if (data.type == 'member'){
-            setFormData({
-                name:'ABC',
-                address:'abc',
-                contact:'0745201484',
-                email:'mikhael@jasphine2611',
-            })
+            const response = await fetch(`/api/members/${data.id}`)
+            const recievedData = await response.json()
+            setFormData(recievedData.message)
             setModalVisible(true)
         }else{
             setModalVisible(true)
@@ -56,7 +56,9 @@ const MemberView = () => {
     
     useEffect(()=>{
         const fetchData = async () =>{
-            const response = await fetch('/api/members')
+            const queryParams = {user:session.user.email}
+            const queryString = new URLSearchParams(queryParams).toString()
+            const response = await fetch(`/api/members?${queryString}`)
             const data = await response.json()
             setFetchedData(data.message)
         }
@@ -81,7 +83,7 @@ const MemberView = () => {
             <div className="w-full p-4 flex flex-col items-center justify-start h-[78vh] overflow-y-auto overflow-x-hidden">
                 {
                     fetchedData.map((member)=>(
-                        <div onClick={()=>{openModal({type:'member', email:member.email})}} className="w-full" key={member.id}>
+                        <div onClick={()=>{openModal({type:'member', id:member.id})}} className="w-full" key={member.id}>
                             <ListWidget fields={['name', 'email', 'contact', 'address']} values={[member.name, member.email, member.contact, member.address]}/>
                         </div>
                     ))

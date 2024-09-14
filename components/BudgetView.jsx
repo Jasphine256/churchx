@@ -5,8 +5,11 @@ import SmallDashboardCard from "./SmallDashboardCard"
 import ListWidget from "./ListWidget"
 import BaseModal from "./BaseModal"
 import { BudgetForm } from "@forms/BudgetForm"
+import { useSession } from "next-auth/react"
 
 const BudgetView = () => {
+
+    const {data:session} = useSession()
 
     const [fetchTrigger, setFetchTrigger] = useState(0)
 
@@ -32,16 +35,11 @@ const BudgetView = () => {
 
     const [isModalVisible, setModalVisible] = useState(false)
 
-    const openModal = (data) =>{
+    const openModal = async (data) =>{
         if (data.type == 'budget'){
-            setFormData({
-                name:'ABC',
-                description:'abc',
-                handler:'mikky',
-                total:'100,000',
-                file:'/',
-                status:'Pending',
-            })
+            const response = await fetch(`/api/budgets/${data.id}`)
+            const recievedData = await response.json()
+            setFormData(recievedData.message)
             setModalVisible(true)
         }else{
             setModalVisible(true)
@@ -80,7 +78,9 @@ const BudgetView = () => {
 
     useEffect(()=>{
         const fetchData = async () =>{
-            const response = await fetch('/api/budgets')
+            const queryParams = {user:session?.user.email}
+            const queryString = new URLSearchParams(queryParams).toString()
+            const response = await fetch(`/api/budgets?${queryString}`)
             const data = await response.json()
             setFetchedData(data.message)
         }

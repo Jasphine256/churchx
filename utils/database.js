@@ -86,8 +86,9 @@ export const readDocumentById = async (collectionName, docId) => {
 
 export const readDocumentByField = async (collectionName, fieldName, value) => {
   try {
+    
     // Create a query against the collection
-    const q = query(collection(db, collectionName), where(fieldName, "==", value));
+    const q = query(collection(db, collectionName), where(fieldName, "==", ''+value+''));
     
     // Execute the query
     const querySnapshot = await getDocs(q);
@@ -95,7 +96,7 @@ export const readDocumentByField = async (collectionName, fieldName, value) => {
     // Check if any documents were found
     if (querySnapshot.empty) {
       console.log("No matching documents found.");
-      return null; // Return null if no documents match the query
+      return []; // Return null if no documents match the query
     }
 
     // Assuming that you only expect one document
@@ -105,7 +106,7 @@ export const readDocumentByField = async (collectionName, fieldName, value) => {
     }));
 
     // Return the first document if multiple documents are returned
-    return documents[0] || null;
+    return documents;
 
   } catch (e) {
     console.error("Error getting documents: ", e);

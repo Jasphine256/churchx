@@ -1,10 +1,14 @@
-import { readDocuments } from "@utils/database"
+import { readDocumentByField } from "@utils/database"
 
 export async function GET(request){
 try {
   
-    const visitors = await readDocuments("Visitors")
-    
+    const { searchParams } = new URL(request.url);
+
+    const user = searchParams.get("user");  // Get the 'user' query parameter
+
+    const visitors = await readDocumentByField("Visitors", 'creator', user)
+
     if (visitors){
         return createResponse(visitors, 200)
     }else{
@@ -12,8 +16,8 @@ try {
     }
     
 } catch (error) {
-    return createResponse("An error occurred", 500)
     console.log("An error occurred")
+    return createResponse("An error occurred", 500)
 }
 }
 

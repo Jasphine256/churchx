@@ -1,10 +1,13 @@
-import { readDocuments } from "@utils/database"
+import { readDocumentByField } from "@utils/database"
 
 export async function GET(request){
     try {
     
-        const projects = await readDocuments('Projects')
-        
+        const { searchParams } = new URL(request.url);
+
+        const user = searchParams.get("user");  // Get the 'user' query parameter
+
+        const projects = await readDocumentByField("Projects", 'creator', user)        
         if (projects){
             return createResponse(projects, 200)
         }else{

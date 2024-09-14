@@ -1,12 +1,15 @@
 'use client'
 import { useState } from "react"
 import { useEffect } from "react"
+import { useSession } from "next-auth/react"
 import SmallDashboardCard from "./SmallDashboardCard"
 import ListWidget from "./ListWidget"
 import BaseModal from "./BaseModal"
 import { TaskForm } from "@forms/TaskForm"
 
 const TasksView = () => {
+
+    const {data:session} = useSession()
 
     const [fetchTrigger, setFetchTrigger] = useState(0)
 
@@ -29,15 +32,11 @@ const TasksView = () => {
 
     const [isModalVisible, setModalVisible] = useState(false)
 
-    const openModal = (data) =>{
+    const openModal = async (data) =>{
         if (data.type == 'task'){
-            setFormData({
-                title: 'ABC',
-                description: 'abc',
-                handler: 'mikky',
-                startDate: '2024-06-09',
-                deadline: '2024-08-05',
-            })
+            const response = await fetch(`/api/tasks/${data.id}`)
+            const recievedData = await response.json()
+            setFormData(recievedData.message)
             setModalVisible(true)
         }else{
             setModalVisible(true)
@@ -75,7 +74,9 @@ const TasksView = () => {
 
     useEffect(()=>{
         const fetchData = async () =>{
-            const response = await fetch('/api/tasks')
+            const queryParams = {user:session?.user.email}
+            const queryString = new URLSearchParams(queryParams).toString()
+            const response = await fetch(`/api/tasks?${queryString}`)
             const data = await response.json()
             setTasks(data.message)
         }
@@ -119,7 +120,7 @@ const TasksView = () => {
             
         </section>
         <BaseModal title={'View/Edit Task'} isVisible={isModalVisible} onClose={closeModel}>
-            <TaskForm title={formData.title} handler={formData.handler} description={formData.description} startDate={formData.startDate} deadline={formData.deadline}/>
+            <TaskForm title={formData.title} handler={formData.handler} description={formData.description} startDate={formData.startDate} deadline={formData.deadline} status={formData.status}/>
         </BaseModal>
     </div>
   )

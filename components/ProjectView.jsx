@@ -1,11 +1,14 @@
 "use client"
 import { useState } from "react";
 import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 import ListWidget from "./ListWidget";
 import BaseModal from "./BaseModal";
 import { ProjectForm } from "@forms/ProjectForm";
 
 const ProjectView = () => {
+
+    const {data:session} = useSession()
 
     const [fetchTrigger, setFetchTrigger] = useState(0)
 
@@ -31,16 +34,11 @@ const ProjectView = () => {
 
     const [isModalVisible, setModalVisible] = useState(false)
 
-    const openModal = (data) =>{
+    const openModal = async (data) =>{
         if (data.type == 'project'){
-            setFormData({
-                name:'ABC',
-                description:'abc',
-                handler:'mikky',
-                team:'navi, sera, henry daphie',
-                budget:'100,000',
-                startDate:'2018-02-11',
-            })
+            const response = await fetch(`/api/projects/${data.id}`)
+            const recievedData = await response.json()
+            setFormData(recievedData.message)
             setModalVisible(true)
         }else{
             setModalVisible(true)
@@ -61,7 +59,9 @@ const ProjectView = () => {
 
     useEffect(()=>{
         const fetchData = async () =>{
-            const response = await fetch('/api/projects')
+            const queryParams = {user:session?.user.email}
+            const queryString = new URLSearchParams(queryParams).toString()
+            const response = await fetch(`/api/projects?${queryString}`)
             const data = await response.json()
             setFetchedData(data.message)
         }

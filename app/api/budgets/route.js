@@ -1,8 +1,13 @@
 import { readDocuments } from "@utils/database";
+import { readDocumentByField } from "@utils/database";
 
 export async function GET(request) {
     try {
-        const budgets = await readDocuments("Budgets")
+        const { searchParams } = new URL(request.url);
+
+        const user = searchParams.get("user");  // Get the 'user' query parameter
+
+        const budgets = await readDocumentByField("Budgets", 'creator', user)
 
         if (budgets) {
             return createResponse(budgets, 200);

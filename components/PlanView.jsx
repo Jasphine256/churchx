@@ -1,12 +1,15 @@
 'use client'
 import { useState } from "react"
 import { useEffect } from "react"
+import { useSession } from "next-auth/react"
 import SmallDashboardCard from "./SmallDashboardCard"
 import ListWidget from "./ListWidget"
 import BaseModal from "./BaseModal"
 import { PlanForm } from "@forms/PlanForm"
 
 const PlanView = () => {
+
+    const {data:session} = useSession()
 
     const [fetchTrigger, setFetchTrigger] = useState(0)
 
@@ -30,15 +33,11 @@ const PlanView = () => {
 
     const [isModalVisible, setModalVisible] = useState(false)
 
-    const openModal = (data) =>{
+    const openModal = async (data) =>{
         if (data.type == 'plan'){
-            setFormData({
-                name:'ABC',
-                description:'abc',
-                handler:'mikky',
-                budget:'100,000',
-                status:'Pending',
-            })
+            const response = await fetch(`/api/plans/${data.id}`)
+            const recievedData = await response.json()
+            setFormData(recievedData.message)
             setModalVisible(true)
         }else{
             setModalVisible(true)
@@ -76,7 +75,9 @@ const PlanView = () => {
 
     useEffect(()=>{
         const fetchData = async () =>{
-            const response = await fetch('/api/plans')
+            const queryParams = {user:session?.user.email}
+            const queryString = new URLSearchParams(queryParams).toString()
+            const response = await fetch(`/api/plans?${queryString}`)
             const data = await response.json()
             setFetchedData(data.message)
         }

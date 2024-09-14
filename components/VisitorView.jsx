@@ -1,11 +1,14 @@
 'use client'
 import { useState } from "react";
 import { useEffect } from "react";
-import ListWidget from "./ListWidget";
+import { useSession } from "next-auth/react";
+import ListWidget3col from "./ListWidget3col";
 import BaseModal from "./BaseModal";
 import { VisitorForm } from "@forms/VisitorForm";
 
 const VisitorView = () => {
+
+    const {data:session} = useSession()
 
     const [fetchTrigger, setFetchTrigger] = useState(0)
 
@@ -27,14 +30,11 @@ const VisitorView = () => {
 
     const [isModalVisible, setModalVisible] = useState(false)
 
-    const openModal = (data) =>{
+    const openModal = async (data) =>{
         if (data.type == 'visitor'){
-            setFormData({
-                name:'ABC',
-                address:'abc',
-                contact:'0745201484',
-                email:'mikhael@jasphine2611',
-            })
+            const response = await fetch(`/api/visitors/${data.id}`)
+            const recievedData = await response.json()
+            setFormData(recievedData.message)
             setModalVisible(true)
         }else{
             setModalVisible(true)
@@ -53,7 +53,9 @@ const VisitorView = () => {
 
     useEffect(()=>{
         const fetchData = async () =>{
-            const response = await fetch('/api/visitors')
+            const queryParams = {user:session?.user.email}
+            const queryString = new URLSearchParams(queryParams).toString()
+            const response = await fetch(`/api/visitors?${queryString}`)
             const data = await response.json()
             setFetchedData(data.message)
         }
@@ -78,8 +80,8 @@ const VisitorView = () => {
             <div className="w-full p-4 flex flex-col items-center justify-start h-[78vh] overflow-y-auto overflow-x-hidden">
                 {
                     fetchedData.map((visitor)=>(
-                        <div className="w-full" key={visitor.id} onClick={()=>{openModal({type:'visitor', email:visitor.email})}}>
-                            <ListWidget fields={['name', 'email', 'contact', 'address']} values={[visitor.name, visitor.email, visitor.contact, visitor.address]}/>
+                        <div className="w-full" key={visitor.id} onClick={()=>{openModal({type:'visitor', id:visitor.id})}}>
+                            <ListWidget3col fields={['name', 'contact', 'address']} values={[visitor.name, visitor.contact, visitor.address]}/>
                         </div>
                     ))
                 }

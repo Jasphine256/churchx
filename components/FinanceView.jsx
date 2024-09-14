@@ -1,12 +1,15 @@
 'use client'
 import { useState } from "react"
 import { useEffect } from "react"
+import { useSession } from "next-auth/react"
 import NameValCard from "./NameValCard"
 import ListWidget3col from "./ListWidget3col"
 import BaseModal from "./BaseModal"
 import { PaymentForm } from "@forms/PaymentForm"
 
 const FinanceView = () => {
+
+    const {data:session} = useSession()
 
     const [fetchTrigger, setFetchTrigger] = useState(0)
 
@@ -144,7 +147,9 @@ const FinanceView = () => {
 
     useEffect(()=>{
         const fetchData = async () =>{
-            const response = await fetch('/api/members')
+            const queryParams = {user:session?.user.email}
+            const queryString = new URLSearchParams(queryParams).toString()
+            const response = await fetch(`/api/payments?${queryString}`)
             const data = await response.json()
             setFetchedData(data.message)
         }
