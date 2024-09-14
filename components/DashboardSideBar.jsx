@@ -6,43 +6,53 @@ const DashboardSideBar = () => {
   const links = [
     {
       name: 'Dashboard',
-      url: '/dashboard'
+      url: '/dashboard',
+      icon:'/assets/icons/dash-dash.png'
     },
     {
       name: 'Tasks',
-      url: '/dashboard/tasks'
+      url: '/dashboard/tasks',
+      icon:'/assets/icons/dash-task.png'
     },
     {
       name: 'Budgets',
-      url: '/dashboard/budgets'
+      url: '/dashboard/budgets',
+      icon:'/assets/icons/dash-budget.png'
     },
     {
       name: 'Plans',
-      url: '/dashboard/plans'
+      url: '/dashboard/plans',
+      icon:'/assets/icons/dash-plan.png'
     },
     {
       name: 'Projects',
-      url: '/dashboard/projects'
+      url: '/dashboard/projects',
+      icon:'/assets/icons/dash-project.png'
     },
     {
       name: 'Ministers',
-      url: '/dashboard/ministers'
+      url: '/dashboard/ministers',
+      icon:'/assets/icons/dash-minister.png'
     },
     {
       name: 'Members',
-      url: '/dashboard/members'
+      url: '/dashboard/members',
+      icon:'/assets/icons/dash-member.png',
     },
     {
       name: 'Visitors',
-      url: '/dashboard/visitors'
+      url: '/dashboard/visitors',
+      icon:'/assets/icons/dash-visitor.png'
     },
     {
       name: 'Finance',
-      url: '/dashboard/finance'
+      url: '/dashboard/finance',
+      icon:'/assets/icons/dash-finance.png'
     },
     {
       name: 'Broadcast',
-      url: '/dashboard/broadcast'
+      url: '/dashboard/broadcast',
+      icon:'/assets/icons/dash-broadcast.png'
     },
   ]
   return (
@@ -52,7 +62,7 @@ const DashboardSideBar = () => {
         {
         links.map((link) =>(
             <Link href={link.url} key={link.url} className="w-full p-2 flex items-center justify-start transition delay-40 ease-in hover:scale-105">
-            <Image src={'/assets/icons/edit.svg'} width={30} height={30} className="p-1 px-2" alt="icon"></Image>
+            <Image src={link.icon} width={30} height={30} className="p-1 px-2" alt="icon"></Image>
             {link.name}
             </Link>
         ))

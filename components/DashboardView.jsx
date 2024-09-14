@@ -84,7 +84,7 @@ const DashboardView = () => {
     ]
   return (
     <div className="w-4/5 flex flex-col items-center justify-center">
-        <section className="w-full m-3 mt-10 flex flex-row flex-wrap items-center justify-evenly">
+        <section className="w-full m-3 mt-5 flex flex-row flex-wrap items-center justify-evenly">
             {
                 articles.map((article) => (
                     <div className="w-1/4" key={article.name}>
