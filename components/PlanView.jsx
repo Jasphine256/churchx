@@ -58,17 +58,17 @@ const PlanView = () => {
     const statistics = [
         {
             name: 'Plans',
-            value: '187',
+            value: '00',
             icon: '/assets/icons/plan.png'
         },
         {
             name: 'Executed',
-            value: '86',
+            value: '00',
             icon: '/assets/icons/member.png'
         },
         {
             name: 'Pending',
-            value: '101',
+            value: '00',
             icon: '/assets/icons/visitor.png'
         },
     ]

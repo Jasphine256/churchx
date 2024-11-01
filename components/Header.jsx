@@ -18,6 +18,8 @@ const Header = () => {
 
             <Link href={'/'} className="text-gray-700 m-1">Home</Link>
 
+            <Link href={'/features'} className="text-gray-700 m-1">Features</Link>
+
             <Link href={'/about'} className="text-gray-700 m-1">About</Link>
             {
                 session?.user ? (

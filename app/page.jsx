@@ -32,9 +32,9 @@ const Home = () => {
         <h1 className="text-4xl font-bold p-3">Church, simplifying God's work</h1>
         <h3 className="text-lg p-1">Managing Plans, Projects, finances, scheduling tasks, ministers,</h3>
         <h3 className="text-lg p-1">backed up database, broadcast messages and lots more</h3>
-        <div className="p-1 mt-4 rounded-full shadow-md bg-white hover:bg-gray-200 hover:shadow">
-          <Link href={'/'} className="px-6 flex flex-nowrap items-center justify-between">
-            See All Features
+        <div className="p-2 mt-4 rounded-full shadow-md text-white bg-green-500 hover:bg-green-400 hover:shadow">
+          <Link href={'/features'} className="px-6 flex flex-nowrap items-center justify-between">
+            Get Started For FREE
             <Image src={'/assets/icons/forward.svg'} alt="feature image" width={27} height={27} className="pl-4"></Image>
           </Link>
         </div>

@@ -15,7 +15,8 @@ const FinanceView = () => {
 
     const [loading, setLoading] = useState(true)
 
-    const [fetchData, setFetchedData] = useState([])
+    const [fetchPayments, setFetchedPayments] = useState([])
+    const [fetchFunds, setFetchedFunds] = useState([])
 
     const [formData, setFormData] = useState({
         name:'',
@@ -24,32 +25,28 @@ const FinanceView = () => {
         amount:'',
     })
 
-    const [transactionType, setTransactionType] = useState('')
+    const [transactionType, setTransactionType] = useState('payments')
 
     const [isModalVisible, setModalVisible] = useState(false)
 
-    const openModal = (data) =>{
+    const openModal = async (data) =>{
         if (data.type == 'payment'){
             setTransactionType('payment')
-            setFormData({
-                name:'ABC',
-                date:'2018-01-01',
-                reason:'abc',
-                amount:'UGX 10,000',
-            })
+            const response = await fetch(`/api/transactions/payments/${data.id}`)
+            const recievedData = await response.json()
+            setFormData(recievedData.message)
             setModalVisible(true)
         }else if (data.type == 'fund'){
             setTransactionType('fund')
-            setFormData({
-                name:'DEF',
-                date:'2018-01-01',
-                reason:'def',
-                amount:'UGX 10,000',
-            })
+            const response = await fetch(`/api/transactions/funds/${data.id}`)
+            const recievedData = await response.json()
+            setFormData(recievedData.message)
             setModalVisible(true)
         }else if (data.type == 'new_payment'){
+            setTransactionType('payment')
             setModalVisible(true)
         }else if (data.type == 'new_fund'){
+            setTransactionType('fund')
             setModalVisible(true)
         }
     }
@@ -68,90 +65,33 @@ const FinanceView = () => {
     const stats = [
         {
             name: 'Account Balance',
-            value: 'UGX 25,000,000'
+            value: 'UGX _ _ _'
         },
         {
             name: 'Weekly Funds',
-            value: 'UGX 650,000'
+            value: 'UGX _ _ _'
         },
         {
             name: 'Weekly Expenditure',
-            value: 'UGX 550,000'
-        }
-    ]
-    const payments = [
-        {
-            name: 'Mikhael',
-            reason: 'Streaming',
-            amount: 'UGX 20,000',
-            date: '22-10-2024'
-        },
-        {
-            name: 'Choir',
-            reason: 'service',
-            amount: 'UGX 200,000',
-            date: '14/03/2024'
-        },
-        {
-            name: 'Sera',
-            reason: 'Flyer printing',
-            amount: 'UGX 100,000',
-            date: '26-11-2020'
-        },
-        {
-            name: 'Jubilee',
-            reason: 'Data',
-            amount: 'UGX 20,000',
-            date: '22-10-2023'
-        },
-        {
-            name: 'Mikhael',
-            reason: 'other',
-            amount: 'UGX 24,0000',
-            date: '07-01-2023'
+            value: 'UGX _ _ _'
         }
     ]
 
-    const funds = [
-        {
-            name: 'Congregation',
-            reason: 'Offertory',
-            amount: 'UGX 260,000',
-            date: '22-10-2024'
-        },
-        {
-            name: 'Choir',
-            reason: 'T-shirts',
-            amount: 'UGX 670,000',
-            date: '14/03/2024'
-        },
-        {
-            name: 'Mr. John Doe',
-            reason: 'Grant',
-            amount: 'UGX 100,000',
-            date: '26-11-2020'
-        },
-        {
-            name: 'Mrs. Jane Doe',
-            reason: 'School ministry',
-            amount: 'UGX 20,000',
-            date: '22-10-2023'
-        },
-        {
-            name: 'Mr. Jack Doe',
-            reason: 'other',
-            amount: 'UGX 98,0000',
-            date: '07-01-2023'
-        }
-    ]
+   
 
     useEffect(()=>{
         const fetchData = async () =>{
-            const queryParams = {user:session?.user.email}
-            const queryString = new URLSearchParams(queryParams).toString()
-            const response = await fetch(`/api/payments?${queryString}`)
-            const data = await response.json()
-            setFetchedData(data.message)
+            let queryParams = {user:session?.user.email, transactionType:"payments"}
+            let queryString = new URLSearchParams(queryParams).toString()
+            let response = await fetch(`/api/transactions?${queryString}`)
+            let data = await response.json()
+
+            setFetchedPayments(data.message)
+            queryParams = {user:session?.user.email, transactionType:"funds"}
+            queryString = new URLSearchParams(queryParams).toString()
+            response = await fetch(`/api/transactions?${queryString}`)
+            data = await response.json()
+            setFetchedFunds(data.message)
         }
         fetchData()
         setLoading(false)
@@ -184,9 +124,9 @@ const FinanceView = () => {
                 </div>
                 <div className="w-full p-4 flex flex-col items-center justify-start h-[62vh] overflow-y-auto overflow-x-hidden">
                     {
-                        payments.map((payment)=>(
-                            <div className="w-full" key={payment.name} onClick={()=>{openModal({type:'payment', id:payment.name})}}>
-                                <ListWidget3col fields={['name', 'reason', 'amount',]} values={[payment.name, payment.reason, payment.amount]}/>
+                        fetchPayments.map((payment)=>(
+                            <div className="w-full" key={payment.name} onClick={()=>{openModal({type:'payment', id:payment.id})}}>
+                                <ListWidget3col fields={['name', 'date', 'amount',]} values={[payment.name, payment.date, payment.amount]}/>
                             </div>
                         ))
                     }
@@ -203,9 +143,9 @@ const FinanceView = () => {
                     </div>
                     <div className="w-full p-4 flex flex-col items-center justify-start h-[62vh] overflow-y-auto overflow-x-hidden">
                         {
-                            funds.map((fund)=>(
-                                <div className="w-full" key={fund.name} onClick={()=>{openModal({type:'fund', id:fund.name})}}>
-                                    <ListWidget3col fields={['name', 'reason', 'amount']} values={[fund.name, fund.reason, fund.amount]}/>
+                            fetchFunds.map((fund)=>(
+                                <div className="w-full" key={fund.name} onClick={()=>{openModal({type:'fund', id:fund.id})}}>
+                                    <ListWidget3col fields={['name', 'date', 'amount']} values={[fund.name, fund.date, fund.amount]}/>
                                 </div>
                             ))
                         }

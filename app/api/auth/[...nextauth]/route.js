@@ -21,6 +21,10 @@ const handler = NextAuth({
                         email: user.email,
                         image: profile.picture,
                     })
+                    createDocument("AccountBalance", {
+                        email: user.email,
+                        amount: "0",
+                    })
                 }
                 return true
             } catch (error) {

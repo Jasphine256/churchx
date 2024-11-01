@@ -126,6 +126,31 @@ export const updateDocument = async (collectionName, docId, updatedData) => {
   }
 };
 
+// Update a Firestore document by email
+export const updateDocumentByEmail = async (collectionName, email, newData) => {
+    try {
+        // Query the collection to find the document with the matching email
+        const q = query(collection(db, collectionName), where('email', '==', email));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            console.log('No matching documents found for email:', email);
+            return;
+        }
+
+        // Loop through query results and update the document
+        querySnapshot.forEach(async (docSnapshot) => {
+            const docRef = doc(db, collectionName, docSnapshot.id);
+
+            // Update the document with the new data
+            await updateDoc(docRef, newData);
+            console.log('Document updated successfully for email:', email);
+        });
+    } catch (error) {
+        console.error('Error updating document:', error);
+    }
+}
+
 
 export const deleteDocument = async (collectionName, docId) => {
   try {

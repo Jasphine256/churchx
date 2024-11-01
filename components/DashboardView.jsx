@@ -1,5 +1,6 @@
 'use client'
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useSession } from "next-auth/react"
 import ListWidget from "./ListWidget"
 import SmallDashboardCard from "./SmallDashboardCard"
 import LargeDashboradCard from "./LargeDashboradCard"
@@ -7,9 +8,15 @@ import BaseModal from "./BaseModal"
 
 const DashboardView = () => {
 
+    const {data:session} = useSession()
+
     const [itemSelection, setSelection] = useState({type:'', id:''})
 
     const [isModalVisible, setModalVisible] = useState(false)
+
+    const [loading, setLoading] = useState(true)
+
+    const [fetchTrigger, setFetchTrigger] = useState(0)
 
     const openModal = (data) =>{
         setSelection(data)
@@ -22,17 +29,17 @@ const DashboardView = () => {
     const articles = [
         {
             name: 'Tasks',
-            value: '27',
+            value: '00',
             icon: '/assets/icons/task.png'
         },
         {
             name: 'Plans',
-            value: '09',
+            value: '00',
             icon: '/assets/icons/plan.png'
         },
         {
             name: 'Projects',
-            value: '16',
+            value: '00',
             icon: '/assets/icons/project.png'
         },
     ]
@@ -40,48 +47,44 @@ const DashboardView = () => {
     const people = [
         {
             name: 'Ministers',
-            value: '89',
+            value: '00',
             icon: '/assets/icons/minister.png'
         },
         {
             name: 'Members',
-            value: '72',
+            value: '00',
             icon: '/assets/icons/member.png'
         },
         {
             name: 'Visitors',
-            value: '159',
+            value: '00',
             icon: '/assets/icons/visitor.png'
         },
         
     ]
 
-    const delayedTasks = [
-        {
-            name: 'Daphine Browe ',
-            task: 'Ignite Mobile App',
-            deadline: '22-10-2003',
-            status: 'Delayed'
-        },
-        {
-            name: 'Ssuna Bruno',
-            task: 'Ignite website',
-            deadline: '04-07-2005',
-            status: 'Delayed'
-        },
-        {
-            name: 'Sera Baibe',
-            task: 'Tuesday Flyer',
-            deadline: '26-11-2020',
-            status: 'Delayed'
-        },
-        {
-            name: 'Serungogi Henry',
-            task: '3 TikTok Videos',
-            deadline: '08-08-2024',
-            status: 'Delayed'
+    const [savedTasks, setTasks] = useState([{
+        title:'',
+        handler:'',
+        deadline:'',
+        status:''
+    }])
+
+    useEffect(()=>{
+        const fetchData = async () =>{
+            const queryParams = {user:session?.user.email}
+            const queryString = new URLSearchParams(queryParams).toString()
+            const response = await fetch(`/api/tasks?${queryString}`)
+            const data = await response.json()
+            setTasks(data.message)
         }
-    ]
+        fetchData()
+        setLoading(false)
+    },[fetchTrigger])
+
+    if (loading){
+        return(<></>)
+    }
   return (
     <div className="w-4/5 flex flex-col items-center justify-center">
         <section className="w-full m-3 mt-5 flex flex-row flex-wrap items-center justify-evenly">
@@ -107,10 +110,10 @@ const DashboardView = () => {
         </section>
 
         <section className="w-[78vw] m-2 flex flex-col items-center justify-start rounded-lg bg-white">
-            <h2 className="font-black text-lg font-bold my-2">Delayed Tasks</h2>
+            <h2 className="font-black text-lg font-bold my-2">Recent Tasks</h2>
             <div className="w-full p-4 flex flex-col items-center justify-start h-[38vh] overflow-y-auto overflow-x-hidden">
             {
-                delayedTasks.map((task)=>(
+                savedTasks.map((task)=>(
                     <div className="w-full" key={task.task} onClick={()=>{openModal({type:'delayed', id:task.task})}}>
                         <ListWidget fields={['title', 'handler', 'deadline', 'status']} values={[task.task, task.name, task.deadline, task.status]}/>
                     </div>

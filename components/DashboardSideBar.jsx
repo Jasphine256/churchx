@@ -54,16 +54,21 @@ const DashboardSideBar = () => {
       url: '/dashboard/broadcast',
       icon:'/assets/icons/dash-broadcast.png'
     },
+    {
+      name: 'Settings',
+      url: '/dashboard/settingspage',
+      icon:'/assets/icons/settings.png'
+    },
   ]
   return (
     <aside className="w-1/5 bg-white rounded-md shadow flex flex-col items-start justify-center mt-2">
     <DashBio/>
-    <nav className="w-4/5 p-2 mt-2 m-auto flex flex-col items-start justify-center rounded-lg bg-blue-50">
+    <nav className="w-4/5 p-2 m-auto flex flex-col items-start justify-center rounded-lg bg-blue-50">
         {
         links.map((link) =>(
             <Link href={link.url} key={link.url} className="w-full p-2 flex items-center justify-start transition delay-40 ease-in hover:scale-105">
-            <Image src={link.icon} width={30} height={30} className="p-1 px-2" alt="icon"></Image>
-            {link.name}
+              <Image src={link.icon} width={30} height={30} className="p-1 px-2" alt="icon"></Image>
+              {link.name}
             </Link>
         ))
         }

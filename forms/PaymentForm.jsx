@@ -17,21 +17,44 @@ export const PaymentForm = (props) => {
         setFormData({...formData,[e.target.name]:e.target.value,})
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        if (props.type == 'payment'){
-            console.log("payment")
-        }else if(props.type == 'fund'){
-            console.log("fund")
+        try{
+            const response = await fetch('/api/transactions/new', {
+                method:'POST',
+                body:JSON.stringify({
+                    creator:session.user.email,
+                    type:props.type,
+                    name:formData.name,
+                    date:formData.date,
+                    reason:formData.reason,
+                    amount:formData.amount,
+                })
+            })
+
+            if (response.status === 201){
+                console.log(props.type+" saved successfully")
+                alert(props.type+" saved successfully")
+            }else if(response.status===200){
+                console.log(props.type+" already exists")
+                alert(props.type+" already exists")
+            }else if(response.status === 500){
+                console.log("An error occurred")
+                alert("An error occurred ohhhh")
+            }
+
+        }catch(error){
+            console.log(error)
         }
-        // handle form submission
+
         console.log(formData)
+        return true
     }
 
   return (
     <form className="w-full flex flex-col items-centerjustify-center" onSubmit={handleSubmit}>
         <div className="w-full py-1">
-            <label htmlFor="name" className=" text-gray-800">Payment To</label> <br />
+            <label htmlFor="name" className=" text-gray-800">{props.type} To/From</label> <br />
             <input type="text" defaultValue={props.name} name="name" id="name" placeholder="Enter Member name" className="w-full p-1 bg-transparent border border-gray-400 rounded px-3 outline-0" onChange={handleChange}/>
         </div>
         <div className="w-full py-1">
