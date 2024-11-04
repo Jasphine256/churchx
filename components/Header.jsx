@@ -13,7 +13,7 @@ const Header = () => {
 
             <div className="flex flex-row items-center justify-center ml-4">
                 <Image src={'/assets/images/bars.svg'} alt='nav icon' width={30} height={30} className="mx-4 ml-2 hidden"/>
-                <Image src={'/assets/images/logo.png'} alt='logo' width={110} height={60}/>
+                <Image src={'/assets/images/CHURCHFLOW-LOGO.svg'} alt='logo' width={200} height={100}/>
             </div>
 
             <Link href={'/'} className="text-gray-700 m-1">Home</Link>
