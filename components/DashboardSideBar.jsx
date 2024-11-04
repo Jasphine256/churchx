@@ -49,16 +49,16 @@ const DashboardSideBar = () => {
       url: '/dashboard/finance',
       icon:'/assets/icons/dash-finance.png'
     },
-    {
-      name: 'Broadcast',
-      url: '/dashboard/broadcast',
-      icon:'/assets/icons/dash-broadcast.png'
-    },
-    {
-      name: 'Settings',
-      url: '/dashboard/settingspage',
-      icon:'/assets/icons/settings.png'
-    },
+    // {
+    //   name: 'Broadcast',
+    //   url: '/dashboard/broadcast',
+    //   icon:'/assets/icons/dash-broadcast.png'
+    // },
+    // {
+    //   name: 'Settings',
+    //   url: '/dashboard/settingspage',
+    //   icon:'/assets/icons/settings.png'
+    // },
   ]
   return (
     <aside className="w-1/5 bg-white rounded-md shadow flex flex-col items-start justify-center mt-2">
