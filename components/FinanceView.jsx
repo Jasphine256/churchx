@@ -16,6 +16,7 @@ const FinanceView = () => {
     const [loading, setLoading] = useState(true)
 
     const [fetchPayments, setFetchedPayments] = useState([])
+
     const [fetchFunds, setFetchedFunds] = useState([])
 
     const [formData, setFormData] = useState({
@@ -36,18 +37,22 @@ const FinanceView = () => {
             const recievedData = await response.json()
             setFormData(recievedData.message)
             setModalVisible(true)
+            setFetchTrigger(0)
         }else if (data.type == 'fund'){
             setTransactionType('fund')
             const response = await fetch(`/api/transactions/funds/${data.id}`)
             const recievedData = await response.json()
             setFormData(recievedData.message)
             setModalVisible(true)
+            setFetchTrigger(0)
         }else if (data.type == 'new_payment'){
             setTransactionType('payment')
             setModalVisible(true)
+            setFetchTrigger(0)
         }else if (data.type == 'new_fund'){
             setTransactionType('fund')
             setModalVisible(true)
+            setFetchTrigger(0)
         }
     }
     const closeModel = () =>{
@@ -59,7 +64,7 @@ const FinanceView = () => {
             amount:'',
         })
         setModalVisible(false)
-        setFetchTrigger((prev)=>{prev+1})
+        setFetchTrigger((prev)=>{prev++})
     }
 
     const stats = [

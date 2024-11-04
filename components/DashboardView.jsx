@@ -29,17 +29,17 @@ const DashboardView = () => {
     const articles = [
         {
             name: 'Tasks',
-            value: '00',
+            value: '_ _',
             icon: '/assets/icons/task.png'
         },
         {
             name: 'Plans',
-            value: '00',
+            value: '_ _',
             icon: '/assets/icons/plan.png'
         },
         {
             name: 'Projects',
-            value: '00',
+            value: '_ _',
             icon: '/assets/icons/project.png'
         },
     ]
@@ -47,17 +47,17 @@ const DashboardView = () => {
     const people = [
         {
             name: 'Ministers',
-            value: '00',
+            value: '_ _',
             icon: '/assets/icons/minister.png'
         },
         {
             name: 'Members',
-            value: '00',
+            value: '_ _',
             icon: '/assets/icons/member.png'
         },
         {
             name: 'Visitors',
-            value: '00',
+            value: '_ _',
             icon: '/assets/icons/visitor.png'
         },
         
@@ -111,14 +111,15 @@ const DashboardView = () => {
 
         <section className="w-[78vw] m-2 flex flex-col items-center justify-start rounded-lg bg-white">
             <h2 className="font-black text-lg font-bold my-2">Recent Tasks</h2>
-            <div className="w-full p-4 flex flex-col items-center justify-start h-[38vh] overflow-y-auto overflow-x-hidden">
-            {
-                savedTasks.map((task)=>(
-                    <div className="w-full" key={task.task} onClick={()=>{openModal({type:'delayed', id:task.task})}}>
-                        <ListWidget fields={['title', 'handler', 'deadline', 'status']} values={[task.task, task.name, task.deadline, task.status]}/>
-                    </div>
-                ))
-            }
+            <div className="w-full p-4 flex flex-col items-center justify-start h-[62vh] overflow-y-auto overflow-x-hidden">
+                {
+                    savedTasks.map((task)=>(
+                        <div className="w-full" key={task.id} onClick={()=>{openModal({type:'task', id:task.id})}}>
+                            <ListWidget fields={['title', 'handler', 'deadline', 'status']} values={[task.title, task.handler, task.deadline, task.status]}/>
+                        </div>
+
+                    ))
+                }
             </div>
         </section>
         <BaseModal title={'Details'} isVisible={isModalVisible} onClose={closeModel}>
