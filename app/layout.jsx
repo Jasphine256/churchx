@@ -13,6 +13,9 @@ export const metadata = {
 const RootLayout = ({children}) => {
   return (
     <html>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+      </head>
         <body className="w-full bg-blue-50">
           <Provider>
             <Header/>
