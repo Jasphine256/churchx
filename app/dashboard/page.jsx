@@ -4,8 +4,7 @@ import DashboardSideBar from "@components/DashboardSideBar";
 const Dashboard = () => {
 
   return (
-    <div className="w-full flex flex-row flex-nowrap items-start jutify-between">
-      <DashboardSideBar/>
+    <div className="mt-16 w-full flex items-center jutify-center">
       <DashboardView/>
     </div>
   )

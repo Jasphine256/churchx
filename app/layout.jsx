@@ -1,5 +1,4 @@
 import "@styles/globals.css"
-import Header from "@components/Header"
 import Footer from "@components/Footer"
 import Provider from "@components/Provider"
 import { Analytics } from "@vercel/analytics/react"
@@ -18,7 +17,6 @@ const RootLayout = ({children}) => {
       </head>
         <body className="w-full bg-blue-50">
           <Provider>
-            <Header/>
             <main className="w-full">{children}</main>
             <Footer/>
           </Provider>

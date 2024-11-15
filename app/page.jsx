@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import Feature from "@components/Feature"
+import Header from "@components/Header"
 
 const Home = () => {
   const features = [
@@ -27,6 +28,7 @@ const Home = () => {
   ]
   return (
     <>
+      <Header/>
       <section className="w-full flex flex-col items-center justify-center p-10 ">
         <h1 className="text-4xl font-bold p-3">The Free Ultimate Management System for the</h1>
         <h1 className="text-4xl font-bold p-3">Church, simplifying God's work</h1>

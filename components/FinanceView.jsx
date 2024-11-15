@@ -77,7 +77,7 @@ const FinanceView = () => {
             value: 'UGX _ _ _'
         },
         {
-            name: 'Weekly Expenditure',
+            name: 'Weekly Expense',
             value: 'UGX _ _ _'
         }
     ]
@@ -107,20 +107,20 @@ const FinanceView = () => {
     }
 
   return (
-    <div className="w-4/5 flex flex-col items-center justify-center">
-        <section className="w-full m-3 mt-5 flex flex-row flex-wrap items-center justify-evenly">
+    <div className="w-full mt-16 flex flex-col items-center justify-center">
+        <section className="w-full m-1 mt-2 lg:m-3 lg:mt-5 flex flex-row flex-wrap items-center justify-evenly">
         {
             stats.map((stat)=>(
-                <div className="w-1/4" key={stat.name}>
+                <div className="w-1/4 min-w-[140px] lg:min-w-[300px] my-2 " key={stat.name}>
                     <NameValCard name={stat.name} value={stat.value}/>
                 </div>
             ))
         }
         </section>
 
-        <section className="w-[78vw] flex flex-row items-center justify-center">
+        <section className="w-full p-2 flex flex-row flex-wrap gap-2 items-center justify-center">
 
-            <article className="w-1/2 m-2 mx-1 flex flex-col items-center justify-start rounded-lg bg-white">
+            <article className="w-full lg:w-[48%] min-w-[300px] flex flex-col items-center justify-start rounded-lg bg-white">
                 <div className="w-full px-4 py-2 flex flex-row flex-nowrap items-center justify-between">
                     <h2 className="font-black text-lg font-bold my-2">Payments</h2>
                     <div>
@@ -139,7 +139,7 @@ const FinanceView = () => {
 
             </article>
 
-            <article className="w-1/2 m-2 mx-1 flex flex-col items-center justify-start rounded-lg bg-white">
+            <article className="w-full lg:w-[48%] min-w-[300px] flex flex-col items-center justify-start rounded-lg bg-white">
                 <div className="w-full px-4 py-2 flex flex-row flex-nowrap items-center justify-between">
                         <h2 className="font-black text-lg font-bold my-2">Funds</h2>
                         <div>

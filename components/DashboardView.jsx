@@ -86,22 +86,18 @@ const DashboardView = () => {
         return(<></>)
     }
   return (
-    <div className="w-4/5 flex flex-col items-center justify-center">
+    <div className="w-full p-2 flex flex-col gap-2 items-center justify-center">
         <section className="w-full m-3 mt-5 flex flex-row flex-wrap items-center justify-evenly">
             {
                 articles.map((article) => (
-                    <div className="w-1/4" key={article.name}>
+                    <div className="w-1/4 min-w-[140px] md:min-w-[300px] m-1" key={article.name}>
                         <LargeDashboradCard name={article.name} icon={article.icon} value={article.value}/>
                     </div>
                 ))
             }
-
-        </section>
-
-        <section className="w-full m-3 mt-5 flex flex-row flex-wrap items-center justify-evenly">
             {
                 people.map((person) => (
-                    <div className="w-1/4" key={person.name}> 
+                    <div className="w-1/4 min-w-[140px] md:min-w-[300px] m-1" key={person.name}> 
                         <SmallDashboardCard name={person.name} icon={person.icon} value={person.value}/>
                     </div>
                 ))
@@ -109,7 +105,7 @@ const DashboardView = () => {
 
         </section>
 
-        <section className="w-[78vw] m-2 flex flex-col items-center justify-start rounded-lg bg-white">
+        <section className="w-full m-2 flex flex-col items-center justify-start rounded-lg bg-white">
             <h2 className="font-black text-lg font-bold my-2">Recent Tasks</h2>
             <div className="w-full p-4 flex flex-col items-center justify-start h-[62vh] overflow-y-auto overflow-x-hidden">
                 {
