@@ -29,7 +29,7 @@ const Home = () => {
   return (
     <>
       <Header/>
-      <section className="w-full flex flex-col items-center justify-center p-10 ">
+      <section className="mt-10 w-full flex flex-col items-center justify-center p-10 ">
         <h1 className="text-4xl font-bold p-3">The Free Ultimate Management System for the</h1>
         <h1 className="text-4xl font-bold p-3">Church, simplifying God's work</h1>
         <h3 className="text-lg p-1">Managing Plans, Projects, finances, scheduling tasks, ministers,</h3>
@@ -42,10 +42,10 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="w-full p-4 flex flex-row flex-warp items-center justify-evenly">
+      <section className="w-full p-2 flex flex-row flex-warp items-center justify-evenly overflow-x-scroll">
         {
           features.map((feature)=>(
-            <div className="w-full md:w-1/2 lg:w-1/4 m-4" key={feature.name}>
+            <div className="min-w-[280px] w-full lg:w-1/4 m-4" key={feature.name}>
               <Feature name={feature.name} url={feature.url} icon={feature.icon}/>
             </div>
           ))
