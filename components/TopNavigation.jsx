@@ -2,13 +2,17 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import {useSession, signOut} from "next-auth/react"
+import Link from 'next/link'
+import Image from 'next/image'
 
 const navigation = [
   { name: 'Home', href: '/', current: false },
-  { name: "Dashboard", href:'/dashboard', current: true},
-  { name: 'Collections', href: '#', current: false },
-  { name: 'People', href: '#', current: false },
+  { name: "Overview", href:'/dashboard', current: true},
   { name: 'Finance', href: '/dashboard/finance', current: false },``
+]
+const dropdownNavigations = [
+    { name: 'Collections', href: '#', current: false },
+    { name: 'People', href: '#', current: false },
 ]
 const userNavigation = [
   { name: 'Settings', href: '/settings' },
@@ -35,10 +39,11 @@ export default function TopNavigation() {
         <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
             <div className="shrink-0">
-                <img
-                alt="Your Company"
-                src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
-                className="h-8 w-8"
+                <Image
+                alt="logo"
+                src="/assets/images/CHURCHFLOW-LOGO.svg"
+                width={160}
+                height={100}
                 />
             </div>
             <div className="hidden md:block">
@@ -56,6 +61,40 @@ export default function TopNavigation() {
                     {item.name}
                     </a>
                 ))}
+                    <Menu>
+                            <MenuButton className={"rounded-md p-2 text-gray-300 hover:bg-gray-700 hover:text-white text-sm font-medium"} >Collections</MenuButton>
+                            <MenuItems anchor="bottom end" className={"bg-gray-800 p-2 flex flex-col w-[10em] rounded-sm shadow-md"}>
+                                <MenuItem className={"p-2 text-gray-300 text-sm font-medium"}>
+                                    <Link href="/dashboard/tasks">Tasks</Link>
+                                </MenuItem>
+                                <MenuItem className={"p-2 text-gray-300 text-sm font-medium"}>
+                                    <Link href="/dashboard/plans">Plans</Link>
+                                </MenuItem>
+                                <MenuItem className={"p-2 text-gray-300 text-sm font-medium"}>
+                                    <Link href="/dashboard/projects">Projects</Link>
+                                </MenuItem>
+                                <MenuItem className={"p-2 text-gray-300 text-sm font-medium"}>
+                                    <Link href="/dashboard/budgets">Budgets</Link>
+                                </MenuItem>
+                            </MenuItems>
+                    </Menu>
+                    <Menu>
+                            <MenuButton className={"rounded-md p-2 text-gray-300 hover:bg-gray-700 hover:text-white text-sm font-medium"} >People</MenuButton>
+                            <MenuItems anchor="bottom end" className={"bg-gray-800 p-2 flex flex-col w-[10em] rounded-sm shadow-md"}>
+                                <MenuItem className={"p-2 text-gray-300 text-sm font-medium"}>
+                                    <Link href="/dashboard/pastors">Pastors</Link>
+                                </MenuItem>
+                                <MenuItem className={"p-2 text-gray-300 text-sm font-medium"}>
+                                    <Link href="/dashboard/ministers">Ministers</Link>
+                                </MenuItem>
+                                <MenuItem className={"p-2 text-gray-300 text-sm font-medium"}>
+                                    <Link href="/dashboard/members">Members</Link>
+                                </MenuItem>
+                                <MenuItem className={"p-2 text-gray-300 text-sm font-medium"}>
+                                    <Link href="/dashboard/visitors">Visitors</Link>
+                                </MenuItem>
+                            </MenuItems>
+                    </Menu>
                 </div>
             </div>
             </div>
@@ -130,6 +169,40 @@ export default function TopNavigation() {
                 {item.name}
             </DisclosureButton>
             ))}
+                    <Menu>
+                            <MenuButton className={"rounded-md p-2 text-gray-300 hover:bg-gray-700 hover:text-white text-sm font-medium"} >Collections</MenuButton>
+                            <MenuItems anchor="bottom end" className={"z-50 bg-gray-800 p-2 flex flex-col w-[10em] rounded-sm shadow-md"}>
+                                <MenuItem className={"p-2 text-gray-300 text-sm font-medium"}>
+                                    <Link href="/dashboard/tasks">Tasks</Link>
+                                </MenuItem>
+                                <MenuItem className={"p-2 text-gray-300 text-sm font-medium"}>
+                                    <Link href="/dashboard/plans">Plans</Link>
+                                </MenuItem>
+                                <MenuItem className={"p-2 text-gray-300 text-sm font-medium"}>
+                                    <Link href="/dashboard/projects">Projects</Link>
+                                </MenuItem>
+                                <MenuItem className={"p-2 text-gray-300 text-sm font-medium"}>
+                                    <Link href="/dashboard/budgets">Budgets</Link>
+                                </MenuItem>
+                            </MenuItems>
+                    </Menu>
+                    <Menu>
+                            <MenuButton className={"rounded-md p-2 text-gray-300 hover:bg-gray-700 hover:text-white text-sm font-medium"} >People</MenuButton>
+                            <MenuItems anchor="bottom end" className={"z-50 bg-gray-800 p-2 flex flex-col w-[10em] rounded-sm shadow-md"}>
+                                <MenuItem className={"p-2 text-gray-300 text-sm font-medium"}>
+                                    <Link href="/dashboard/pastors">Pastors</Link>
+                                </MenuItem>
+                                <MenuItem className={"p-2 text-gray-300 text-sm font-medium"}>
+                                    <Link href="/dashboard/ministers">Ministers</Link>
+                                </MenuItem>
+                                <MenuItem className={"p-2 text-gray-300 text-sm font-medium"}>
+                                    <Link href="/dashboard/members">Members</Link>
+                                </MenuItem>
+                                <MenuItem className={"p-2 text-gray-300 text-sm font-medium"}>
+                                    <Link href="/dashboard/visitors">Visitors</Link>
+                                </MenuItem>
+                            </MenuItems>
+                    </Menu>
         </div>
         <div className="border-t border-gray-700 pb-3 pt-4">
             <div className="flex items-center px-5">

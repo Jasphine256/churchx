@@ -3,8 +3,7 @@ import MemberView from "@components/MemberView"
 
 const MembersPage = () => {
   return (
-    <div className="w-full flex flex-row flex-nowrap items-start jutify-between">
-      <DashboardSideBar/>
+    <div className="w-full mt-16 p-1 lg:p-2  flex flex-row flex-nowrap items-start jutify-between">
       <MemberView/>
     </div>
   )

@@ -86,7 +86,7 @@ const DashboardView = () => {
         return(<></>)
     }
   return (
-    <div className="w-full p-2 flex flex-col gap-2 items-center justify-center">
+    <div className="w-full p-1 lg:p-1 flex flex-col gap-2 items-center justify-center">
         <section className="w-full m-3 mt-5 flex flex-row flex-wrap items-center justify-evenly">
             {
                 articles.map((article) => (
@@ -105,7 +105,7 @@ const DashboardView = () => {
 
         </section>
 
-        <section className="w-full m-2 flex flex-col items-center justify-start rounded-lg bg-white">
+        <section className="w-full flex flex-col items-center justify-start rounded-lg bg-white">
             <h2 className="font-black text-lg font-bold my-2">Recent Tasks</h2>
             <div className="w-full p-4 flex flex-col items-center justify-start h-[62vh] overflow-y-auto overflow-x-hidden">
                 {

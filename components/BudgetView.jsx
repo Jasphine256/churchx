@@ -92,7 +92,7 @@ const BudgetView = () => {
         return(<></>)
     }
   return (
-    <div className="w-4/5 flex flex-col items-center justify-center">
+    <div className="w-full flex flex-col items-center justify-center">
         <section className="w-full m-3 mt-5 flex flex-row flex-wrap items-center justify-evenly">
             {
                 statistics.map((stat) => (
@@ -104,7 +104,7 @@ const BudgetView = () => {
 
         </section>
 
-        <section className="w-[78vw] m-2 flex flex-col items-center justify-start rounded-lg bg-white">
+        <section className="w-full flex flex-col items-center justify-start rounded-lg bg-white">
             <div className="w-full px-4 py-2 flex flex-row flex-nowrap items-center justify-between">
                 <h2 className="font-black text-lg font-bold my-2">Budgets</h2>
                 <div>

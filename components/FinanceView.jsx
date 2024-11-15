@@ -107,7 +107,7 @@ const FinanceView = () => {
     }
 
   return (
-    <div className="w-full mt-16 flex flex-col items-center justify-center">
+    <div className="w-full mt-16 p-1 lg:p-2 flex flex-col items-center justify-center">
         <section className="w-full m-1 mt-2 lg:m-3 lg:mt-5 flex flex-row flex-wrap items-center justify-evenly">
         {
             stats.map((stat)=>(
@@ -118,7 +118,7 @@ const FinanceView = () => {
         }
         </section>
 
-        <section className="w-full p-2 flex flex-row flex-wrap gap-2 items-center justify-center">
+        <section className="w-full flex flex-row flex-wrap gap-2 items-center justify-center">
 
             <article className="w-full lg:w-[48%] min-w-[300px] flex flex-col items-center justify-start rounded-lg bg-white">
                 <div className="w-full px-4 py-2 flex flex-row flex-nowrap items-center justify-between">

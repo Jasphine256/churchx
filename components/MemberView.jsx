@@ -71,9 +71,9 @@ const MemberView = () => {
     }
 
   return (
-    <div className="w-4/5 flex flex-col items-center justify-center">
+    <div className="w-full flex flex-col items-center justify-center">
 
-        <section className="w-[78vw] mt-2 flex flex-col items-center justify-start rounded-lg bg-white">
+        <section className="w-full mt-2 flex flex-col items-center justify-start rounded-lg bg-white">
             <div className="w-full px-4 py-2 flex flex-row flex-nowrap items-center justify-between">
                 <h2 className="font-black text-lg font-bold my-2">Members Database</h2>
                 <div>
